@@ -1,0 +1,70 @@
+body {
+    min-height: 100vh;
+}
+
+.home-bg {
+    background-image: url('../assets/images/bg-1.jpeg');
+    /* Adjust background properties as needed */
+    background-size: cover;
+    background-attachment: fixed;
+    background-position: bottom;
+    background-repeat: no-repeat;
+}
+
+.glass {
+    backdrop-filter: blur(30px);
+    background-color: rgb(255 255 255 / 60%);
+}
+
+.inp-error {
+    display: none;
+    color: red;
+    font-size: 14px;
+}
+
+legend{
+    width: fit-content;
+    margin: 0 auto;
+    font-size: 20px;
+    padding: 0px 10px;
+    background-color: #000;
+}
+
+
+legend::after{
+    position: absolute;
+    content: "";
+    z-index: -1;
+    height: 2px;
+    width: 100%;
+    background-color: #000;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.select2-container--default .select2-selection--single {
+    padding: 0.25rem !important;
+    height: unset !important;
+    border-color: rgb(229 231 235);
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.select2-search--dropdown {
+    display: none;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.select2{
+    width: 100% !important;
+}

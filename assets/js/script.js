@@ -28,6 +28,6 @@ function handleCredentialResponse(response) {
     //     });
 }
 
-document.getElementById('g_id_onload').addEventListener('click', () => {
-    google.accounts.id.prompt();
-});
+// document.getElementById('g_id_onload').addEventListener('click', () => {
+//     google.accounts.id.prompt();
+// });

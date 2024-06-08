@@ -10,12 +10,17 @@
         <script src="https://accounts.google.com/gsi/client" async defer></script>
     </head>
 
-    <body>
-        <h1 class="text-3xl font-bold underline"> Hello, Tailwind CSS! </h1>
-        <div id="g_id_onload" data-client_id="120077520982-v1ou763arhfl1ithjmvfm8m2t8a0opgk.apps.googleusercontent.com" data-callback="handleCredentialResponse">
+    <body class="home-bg py-10 flex flex-col justify-center">
+        <div class="bg-white shadow-md rounded px-8 pt-8 pb-8 mb-4 flex flex-col w-96 mx-auto glass">
+            <div class="flex flex-col justify-center items-center">
+                <a href="create-event.html">
+                    <img class="h-10" src="./assets/images/google-signin.png" alt="Google">
+                </a>
+            </div>
         </div>
-        <div class="g_id_signin" data-type="standard"></div>
-
+        <!-- <div id="g_id_onload" data-client_id="120077520982-v1ou763arhfl1ithjmvfm8m2t8a0opgk.apps.googleusercontent.com" data-callback="handleCredentialResponse">
+        </div>
+        <div class="g_id_signin" data-type="standard"></div> -->
         <script src="assets/js/script.js"></script>
     </body>
 
