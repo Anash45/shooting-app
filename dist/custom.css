@@ -22,7 +22,7 @@ body {
     font-size: 14px;
 }
 
-legend{
+legend {
     width: fit-content;
     margin: 0 auto;
     font-size: 20px;
@@ -31,7 +31,7 @@ legend{
 }
 
 
-legend::after{
+legend::after {
     position: absolute;
     content: "";
     z-index: -1;
@@ -42,6 +42,7 @@ legend::after{
     top: 50%;
     transform: translateY(-50%);
 }
+
 .select2-container--default .select2-selection--single {
     padding: 0.25rem !important;
     height: unset !important;
@@ -65,6 +66,53 @@ legend::after{
     display: block;
 }
 
-.select2{
+.select2 {
     width: 100% !important;
+}
+
+.h-100vh {
+    height: 100vh;
+}
+
+.container {
+    width: 100%;
+    margin: 0 auto;
+    padding: 0 16px;
+}
+
+@media (min-width: 576px) {
+
+    /* Small devices (576px and up) */
+    .container {
+        max-width: 540px;
+        /* Set the maximum width for small devices */
+        padding: 0 20px;
+    }
+}
+
+@media (min-width: 768px) {
+
+    /* Medium devices (768px and up) */
+    .container {
+        max-width: 720px;
+        /* Set the maximum width for medium devices */
+    }
+}
+
+@media (min-width: 992px) {
+
+    /* Large devices (992px and up) */
+    .container {
+        max-width: 960px;
+        /* Set the maximum width for large devices */
+    }
+}
+
+@media (min-width: 1200px) {
+
+    /* Extra large devices (1200px and up) */
+    .container {
+        max-width: 1140px;
+        /* Set the maximum width for extra large devices */
+    }
 }
