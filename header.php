@@ -1,4 +1,4 @@
-<header class="px-4 py-3 border-b-2 border-blue-900 glass mb-10 sticky top-0 z-10">
+<header class="px-4 py-3 border-b-2 border-blue-900 glass sticky top-0 z-10">
     <div class="container flex justify-between">
         <div class="flex items-center gap-2">
             <img src="<?php echo $_SESSION['user_picture']; ?>" class="w-14 h-14 rounded-full" alt="Profile Picture">
@@ -8,9 +8,9 @@
             </div>
         </div>
         <nav class="flex items-center gap-3">
-            <span
+            <!-- <span
                 class="text-black-600 cursor-pointer hover:text-black-800 font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><i
-                    class="fa-regular fa-plus"></i> Add Note</span>
+                    class="fa-regular fa-plus"></i> Add Note</span> -->
             <a href="./create-event.php"
                 class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><i
                     class="fa-regular fa-plus"></i> Create Event</a>

@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <?php
         include ('./header.php');
         ?>
-        <main>
+        <main class="mt-10">
             <form action="" method="POST" oninput="validateFields()">
                 <div class="tab-content active" id="tab1">
                     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
