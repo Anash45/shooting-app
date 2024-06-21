@@ -4,15 +4,15 @@
 // Start or resume session
 session_start();
 // Database connection parameters
-// $servername = "localhost";
-// $username = "u956940883_clay_shooting";
-// $password = "6B?ATRfFBU*c";
-// $dbname = "u956940883_clay_shooting";
-
 $servername = "localhost";
-$username = "root";
-$password = "root";
-$dbname = "clay_shooting_db";
+$username = "u956940883_clay_shooting";
+$password = "6B?ATRfFBU*c";
+$dbname = "u956940883_clay_shooting";
+
+// $servername = "localhost";
+// $username = "root";
+// $password = "root";
+// $dbname = "clay_shooting_db";
 
 // Create a connection to the database
 $conn = new mysqli($servername, $username, $password, $dbname);
