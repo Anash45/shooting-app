@@ -80,6 +80,14 @@ legend::after {
     padding: 0 16px;
 }
 
+th, td{
+    padding: 5px;
+}
+
+.last-tr th, .last-tr td{
+    border-bottom: 1px solid #000;
+}
+
 @media (min-width: 576px) {
 
     /* Small devices (576px and up) */

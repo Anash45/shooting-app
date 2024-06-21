@@ -11,13 +11,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
     $date = date('Y-m-d', strtotime($_POST['date']));
     $location = $_POST['location'];
     $weather = $_POST['weather'];
+    $totalShots = $_POST['totalShots'];
     $ammo = $_POST['ammo'];
     $poi = $_POST['poi'];
     $glasses = $_POST['glasses'];
     $ears = $_POST['ears'];
     // Insert main fields into events table
-    $stmt = mysqli_prepare($conn, "INSERT INTO events (type, date, location, weather, ammo, poi, glasses, ears, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "ssssssssi", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $userid);
+    $stmt = mysqli_prepare($conn, "INSERT INTO events (type, date, location, weather, ammo, poi, glasses, ears, totalShots, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    mysqli_stmt_bind_param($stmt, "ssssssssii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userid);
     mysqli_stmt_execute($stmt);
 
     // Get the last inserted eventID
@@ -441,7 +442,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
-                        <input type="number" required id="handicapR${handicapCount + 1}" value="0" name="handicap[]" min="0" max="30"
+                        <input type="number" required id="handicapR${handicapCount + 1}" value="0" name="handicaps[]" min="0" max="30"
                             class="form-input w-full border p-1 rounded">
                         <p class="text-xs text-gray-900 p-1">0-30 handicap per round.</p>
                         <p class="inp-error"></p>

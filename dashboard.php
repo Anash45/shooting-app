@@ -73,7 +73,7 @@ if (isset($_SESSION['notifications'])) {
                         <?php echo $info; ?>
                         <?php
                         // Query to fetch event data
-                        $sql = "SELECT eventID, location, date FROM events WHERE user_id = '$userid'";
+                        $sql = "SELECT eventID, location, date FROM events WHERE user_id = '$userid' ORDER BY createdAt DESC";
                         $result = mysqli_query($conn, $sql);
 
                         // Check if there are any results

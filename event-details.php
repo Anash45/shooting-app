@@ -134,6 +134,12 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                         echo '<tr>';
                                         echo '<th>' . $roundType . ' ('.$totalRounds.')</th>' . '<td>' . implode(', ', $roundValues) . '</td>';
                                         echo '</tr>';
+                                        echo '<tr>';
+                                        echo '<th>Total ' . $roundType . ' Shot </th>' . '<td>' . $totalRounds * count($roundValues) . '</td>';
+                                        echo '</tr>';
+                                        echo '<tr class="last-tr">';
+                                        echo '<th>Total ' . $roundType . ' Hit </th>' . '<td>' . array_sum($roundValues) . '</td>';
+                                        echo '</tr>';
                                     }
                                     echo '</table>';
                                 }
