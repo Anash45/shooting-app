@@ -77,7 +77,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <link href="dist/custom.css" rel="stylesheet">
     </head>
 
-    <body class="home-bg py-10 flex flex-col justify-center">
+    <body class="home-bg pb-10 flex flex-col justify-center">
+        <?php
+        include ('./header.php');
+        ?>
         <main>
             <form action="" method="POST" oninput="validateFields()">
                 <div class="tab-content active" id="tab1">

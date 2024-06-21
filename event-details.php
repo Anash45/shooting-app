@@ -76,7 +76,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <link href="dist/custom.css" rel="stylesheet">
     </head>
 
-    <body class="home-bg py-10 flex flex-col justify-center">
+    <body class="home-bg pb-10 flex flex-col justify-center">
+        <?php
+        include ('./header.php');
+        ?>
         <main>
             <form action="" method="POST" oninput="validateFields()">
                 <div class="tab-content active" id="tab1">
@@ -124,15 +127,15 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                     }
                                     echo '<table class="w-full mt-4">';
                                     foreach ($rounds as $roundType => $roundValues) {
-                                        if(strtolower($roundType) == 'singles'){
+                                        if (strtolower($roundType) == 'singles') {
                                             $totalRounds = 25;
-                                        }elseif(strtolower($roundType) == 'handicaps'){
+                                        } elseif (strtolower($roundType) == 'handicaps') {
                                             $totalRounds = 25;
-                                        }elseif(strtolower($roundType) == 'doubles'){
+                                        } elseif (strtolower($roundType) == 'doubles') {
                                             $totalRounds = 50;
                                         }
                                         echo '<tr>';
-                                        echo '<th>' . $roundType . ' ('.$totalRounds.')</th>' . '<td>' . implode(', ', $roundValues) . '</td>';
+                                        echo '<th>' . $roundType . ' (' . $totalRounds . ')</th>' . '<td>' . implode(', ', $roundValues) . '</td>';
                                         echo '</tr>';
                                         echo '<tr>';
                                         echo '<th>Total ' . $roundType . ' Shot </th>' . '<td>' . $totalRounds * count($roundValues) . '</td>';

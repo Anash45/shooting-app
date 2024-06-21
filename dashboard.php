@@ -45,28 +45,11 @@ if (isset($_SESSION['notifications'])) {
     </head>
 
     <body class="home-bg flex flex-col">
-        <div class="h-100vh glass">
-            <header class="px-4 py-3 border-b-2 border-blue-900">
-                <div class="container flex justify-between">
-                    <div class="flex items-center gap-2">
-                        <img src="<?php echo $_SESSION['user_picture']; ?>" class="w-14 h-14 rounded-full"
-                            alt="Profile Picture">
-                        <div class="flex flex-col">
-                            <h2 class="font-bold text-lg text-blue-700"><?php echo $_SESSION['user_name']; ?></h2>
-                            <h5 class="font-medium text-blue-900"><?php echo $_SESSION['user_email']; ?></h5>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <a href="./create-event.php"
-                            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><i
-                                class="fa-regular fa-plus"></i> Create Event</a>
-                        <a href="./logout.php"
-                            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><i
-                                class="fa fa-sign-out"></i> Logout</a>
-                    </div>
-                </div>
-            </header>
-            <main class="py-5">
+        <div class="h-100vh">
+            <?php
+            include('./header.php');
+            ?>
+            <main class="py-5 h-100vh glass">
                 <div class="container">
                     <h3 class="text-3xl font-bold text-center text-blue-600">My Events</h3>
                     <div class="events py-10">
