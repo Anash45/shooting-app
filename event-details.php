@@ -98,7 +98,7 @@ if (isset($_GET['eventID'])) {
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css" rel="stylesheet">
+        <link href="dist/custom.css?v=3" rel="stylesheet">
     </head>
 
     <body class="home-bg pb-10 flex flex-col justify-center">
@@ -219,7 +219,7 @@ if (isset($_GET['eventID'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
             integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="assets/js/script.js"></script>
+        <script src="assets/js/script.js?v=3"></script>
     </body>
 
 </html>
