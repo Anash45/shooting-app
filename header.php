@@ -21,9 +21,6 @@ if (isset($_SESSION['notifications'])) {
                 <a href="./dashboard.php"
                     class="text-gray-700 cursor-pointer hover:text-gray-800 font-bold py-2 px-0 rounded focus:outline-none focus:shadow-outline"><i
                         class="fa fa-home"></i> Home</a>
-                <span
-                    class="text-gray-700 cursor-pointer hover:text-gray-800 font-bold py-2 px-0 rounded focus:outline-none focus:shadow-outline"><i
-                        class="fa-regular fa-plus"></i> Add Note</span>
                 <a href="./create-event.php"
                     class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"><i
                         class="fa-regular fa-plus"></i> Create Event</a>
