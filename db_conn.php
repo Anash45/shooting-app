@@ -9,6 +9,7 @@ $username = "u956940883_clay_shooting";
 $password = "6B?ATRfFBU*c";
 $dbname = "u956940883_clay_shooting";
 
+$info = '';
 // $servername = "localhost";
 // $username = "root";
 // $password = "root";

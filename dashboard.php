@@ -20,14 +20,6 @@ if (isset($_REQUEST['delete'])) {
     }
 }
 
-$info = '';
-if (isset($_SESSION['notifications'])) {
-    foreach ($_SESSION['notifications'] as $type => $message) {
-        $classes = ($type == 'error') ? 'bg-red-200 border-red-800 text-red-800 ' : 'bg-green-200 border-green-800 text-green-800 ';
-        $info .= '<div class="px-3 py-2 mb-3 ' . $classes . ' border rounded">Event is created successfully!</div>';
-    }
-    $_SESSION['notifications'] = array();
-}
 
 ?>
 <!DOCTYPE html>
@@ -47,7 +39,7 @@ if (isset($_SESSION['notifications'])) {
     <body class="home-bg flex flex-col">
         <div class="h-100vh">
             <?php
-            include('./header.php');
+            include ('./header.php');
             ?>
             <main class="py-5 h-100vh glass">
                 <div class="container">
@@ -70,10 +62,10 @@ if (isset($_SESSION['notifications'])) {
 
                                 // Generate HTML structure for each event
                                 echo '<div class="bg-white event shadow-md rounded-md p-3 mb-4">';
-                                echo '<div class="flex justify-between gap-3 mb-2 items-center">';
-                                echo '<h4 class="font-bold text-2xl text-blue-900">' . $location . '</h4>';
+                                echo '<div class="flex justify-between gap-3 mb-2">';
+                                echo '<h4 class="font-bold sm:text-2xl text-lg text-blue-900">' . $location . '</h4>';
                                 echo '<div>';
-                                echo '<a onclick="return confirm(\'Do you really want to delete this event?\');" href="?delete=' . $eventID . '" class="px-2 text-xs py-1 rounded bg-red-700 hover:bg-red-800 text-white"><i class="fa fa-trash"></i></a>';
+                                echo '<div class="flex items-center gap-1"><a href="?create-event.php?eventID=' . $eventID . '" class="px-2 text-xs py-1 rounded bg-blue-700 hover:bg-blue-800 text-white"><i class="fa fa-edit"></i></a> <a onclick="return confirm(\'Do you really want to delete this event?\');" href="?delete=' . $eventID . '" class="px-2 text-xs py-1 rounded bg-red-700 hover:bg-red-800 text-white"><i class="fa fa-trash"></i></a></div>';
                                 echo '</div>';
                                 echo '</div>';
                                 echo '<div class="flex items-center gap-3 justify-between">';

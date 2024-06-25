@@ -251,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             <div class="mb-4">
                                 <label for="totalShots" class="block text-gray-700 text-sm font-bold mb-2">Total
                                     Shots</label>
-                                <input type="range" id="totalShots" value="300" name="totalShots" min="1" max="600"
+                                <input type="range" id="totalShots" value="0" name="totalShots" min="1" max="600"
                                     class="range-input mt-2 w-full">
                                 <div id="totalShotsValue" class="text-center mt-2 text-blue-600 text-xl font-bold">300
                                 </div>
@@ -271,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             type="button" onclick="removeRound(event)"><i
                                                 class="fa fa-minus"></i></button>
                                     </label>
-                                    <input type="number" required id="signlesR1" value="0" name="singles[]" min="0"
+                                    <input type="number" required id="signlesR1" name="singles[]" min="0"
                                         max="25" class="form-input w-full border p-1 rounded">
                                     <p class="text-xs text-gray-900 p-1">0-25 singles per round.</p>
                                     <p class="inp-error"></p>
@@ -294,7 +294,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             type="button" onclick="removeRound(event)"><i
                                                 class="fa fa-minus"></i></button>
                                     </label>
-                                    <input type="number" required id="signlesR1" value="0" name="handicaps[]" min="0"
+                                    <input type="number" required id="signlesR1" name="handicaps[]" min="0"
                                         max="25" class="form-input w-full border p-1 rounded">
                                     <p class="text-xs text-gray-900 p-1">0-25 handicaps per round.</p>
                                     <p class="inp-error"></p>
@@ -317,7 +317,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             type="button" onclick="removeRound(event)"><i
                                                 class="fa fa-minus"></i></button>
                                     </label>
-                                    <input type="number" required id="doubleR1" value="0" name="doubles[]" min="0"
+                                    <input type="number" required id="doubleR1" name="doubles[]" min="0"
                                         max="50" class="form-input w-full border p-1 rounded">
                                     <p class="text-xs text-gray-900 p-1">0-50 doubles per round.</p>
                                     <p class="inp-error"></p>
@@ -406,7 +406,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
-                        <input type="number" required id="singlesR${singleCount + 1}" value="0" name="singles[]" min="0" max="25"
+                        <input type="number" required id="singlesR${singleCount + 1}" name="singles[]" min="0" max="25"
                             class="form-input w-full border p-1 rounded">
                         <p class="text-xs text-gray-900 p-1">0-25 singles per round.</p>
                         <p class="inp-error"></p>
@@ -425,7 +425,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
-                        <input type="number" required id="doublesR${doubleCount + 1}" value="0" name="doubles[]" min="0" max="50"
+                        <input type="number" required id="doublesR${doubleCount + 1}" name="doubles[]" min="0" max="50"
                             class="form-input w-full border p-1 rounded">
                         <p class="text-xs text-gray-900 p-1">0-50 doubles per round.</p>
                         <p class="inp-error"></p>
@@ -445,7 +445,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
-                        <input type="number" required id="handicapR${handicapCount + 1}" value="0" name="handicaps[]" min="0" max="30"
+                        <input type="number" required id="handicapR${handicapCount + 1}" name="handicaps[]" min="0" max="30"
                             class="form-input w-full border p-1 rounded">
                         <p class="text-xs text-gray-900 p-1">0-30 handicap per round.</p>
                         <p class="inp-error"></p>
@@ -468,17 +468,17 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                     console.log($(this), roundNum + 1);
                 })
 
-                if (singlesCount <= 8 && singlesCount > 1) {
+                if (singlesCount <= 8 && singlesCount > 0) {
                     $('#singles .remove-btn').show();
                 } else {
                     $('#singles .remove-btn').hide();
                 }
-                if (handicapCount <= 8 && handicapCount > 1) {
+                if (handicapCount <= 8 && handicapCount > 0) {
                     $('#handicap .remove-btn').show();
                 } else {
                     $('#handicap .remove-btn').hide();
                 }
-                if (doublesCount <= 4 && doublesCount > 1) {
+                if (doublesCount <= 4 && doublesCount > 0) {
                     $('#doubles .remove-btn').show();
                 } else {
                     $('#doubles .remove-btn').hide();
@@ -490,7 +490,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 let target = e.currentTarget;
                 let parentRoundsCount = $(target).closest('.rounds-cont').find('.round-type').length;
                 console.log(parentRoundsCount);
-                if (parentRoundsCount > 1) {
+                if (parentRoundsCount > 0) {
                     $(target).closest('.round-type').remove();
                 }
                 checkRoundCounts();

@@ -1,5 +1,10 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     min-height: 100vh;
+    overflow-x: hidden;
 }
 
 .home-bg {
@@ -13,6 +18,7 @@ body {
 
 .glass {
     backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
     background-color: rgb(255 255 255 / 60%);
 }
 
@@ -71,7 +77,7 @@ legend::after {
 }
 
 .h-100vh {
-    height: 100vh;
+    min-height: 100vh;
 }
 
 .container {
@@ -80,12 +86,54 @@ legend::after {
     padding: 0 16px;
 }
 
-th, td{
+th,
+td {
     padding: 5px;
 }
 
-.last-tr th, .last-tr td{
+.last-tr th,
+.last-tr td {
     border-bottom: 1px solid #000;
+}
+
+.note-floater {
+    position: fixed;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%) translateX(calc(100% - 35px));
+    transition: 0.3s ease-in-out;
+}
+
+.note-floater:hover {
+    transform: translateY(-50%) translateX(0);
+}
+
+.note-floater a {
+    display: block;
+}
+
+/* Additional custom styles for the backdrop and popup */
+.popup-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.container {
+    max-width: 100%;
+}
+
+.note{
+    position: relative;
+}
+.thumb-pin{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    height: 40px;
+}
+.truncate {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 @media (min-width: 576px) {
@@ -122,5 +170,27 @@ th, td{
     .container {
         max-width: 1140px;
         /* Set the maximum width for extra large devices */
+    }
+}
+
+@media (max-width: 992px) {
+    nav {
+        height: 0px;
+        overflow: hidden;
+        width: 100%;
+        position: absolute;
+        left: 0;
+        top: 82px;
+        background-color: #fff;
+        box-shadow: 0 0 10px #c0c0c0;
+    }
+
+    nav>div {
+        align-items: flex-start !important;
+        flex-direction: column;
+    }
+
+    nav.expanded {
+        height: max-content;
     }
 }
