@@ -148,15 +148,13 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         </div>
                         <!-- Weather (Text Box) -->
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="weather">Weather <span
-                                    class="text-red-600">*</span></label>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="weather">Weather </label>
                             <input id="weather" name="weather" type="text" class="form-input w-full border p-1 rounded">
                             <p class="inp-error">Please enter the weather.</p>
                         </div>
                         <!-- Ammo (Drop Down) -->
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="ammo">Ammo <span
-                                    class="text-red-600">*</span></label>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="ammo">Ammo </label>
                             <select id="ammo" name="ammo" class="form-select2 w-full border p-2">
                                 <option value="">Select Ammo</option>
                                 <option value="Federal Top Gun 1145fps 1 1/8 oz. Size 8">Federal Top Gun 1145fps 1 1/8
@@ -192,8 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         </div>
                         <!-- POI (Drop Down) -->
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="poi">POI <span
-                                    class="text-red-600">*</span></label>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="poi">POI </label>
                             <select id="poi" name="poi" class="form-select2 w-full border p-2">
                                 <option value="">Select POI</option>
                                 <option value="50/50">50/50</option>
@@ -208,8 +205,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         </div>
                         <!-- Glasses (Drop Down) -->
                         <div class="mb-4">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="glasses">Glasses <span
-                                    class="text-red-600">*</span></label>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="glasses">Glasses </label>
                             <select id="glasses" name="glasses" class="form-select2 w-full border p-2">
                                 <option value="">Select Glasses</option>
                                 <option value="Ranger">Ranger</option>
@@ -221,8 +217,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         </div>
                         <!-- Ears (Drop Down) -->
                         <div class="mb-6">
-                            <label class="block text-gray-700 text-sm font-bold mb-2" for="ears">Ears <span
-                                    class="text-red-600">*</span></label>
+                            <label class="block text-gray-700 text-sm font-bold mb-2" for="ears">Ears </label>
                             <select id="ears" name="ears" class="form-select2 w-full border p-2">
                                 <option value="">Select Ear Protection</option>
                                 <option value="Standard">Standard</option>
@@ -271,8 +266,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             type="button" onclick="removeRound(event)"><i
                                                 class="fa fa-minus"></i></button>
                                     </label>
-                                    <input type="number" required id="signlesR1" name="singles[]" min="0"
-                                        max="25" class="form-input w-full border p-1 rounded">
+                                    <input type="number" required id="signlesR1" name="singles[]" min="0" max="25"
+                                        class="form-input w-full border p-1 rounded">
                                     <p class="text-xs text-gray-900 p-1">0-25 singles per round.</p>
                                     <p class="inp-error"></p>
                                 </div>
@@ -294,8 +289,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             type="button" onclick="removeRound(event)"><i
                                                 class="fa fa-minus"></i></button>
                                     </label>
-                                    <input type="number" required id="signlesR1" name="handicaps[]" min="0"
-                                        max="25" class="form-input w-full border p-1 rounded">
+                                    <input type="number" required id="signlesR1" name="handicaps[]" min="0" max="25"
+                                        class="form-input w-full border p-1 rounded">
                                     <p class="text-xs text-gray-900 p-1">0-25 handicaps per round.</p>
                                     <p class="inp-error"></p>
                                 </div>
@@ -317,8 +312,8 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                             type="button" onclick="removeRound(event)"><i
                                                 class="fa fa-minus"></i></button>
                                     </label>
-                                    <input type="number" required id="doubleR1" name="doubles[]" min="0"
-                                        max="50" class="form-input w-full border p-1 rounded">
+                                    <input type="number" required id="doubleR1" name="doubles[]" min="0" max="50"
+                                        class="form-input w-full border p-1 rounded">
                                     <p class="text-xs text-gray-900 p-1">0-50 doubles per round.</p>
                                     <p class="inp-error"></p>
                                 </div>
@@ -497,7 +492,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
             }
             function validateFields() {
                 // IDs of the input fields
-                var fieldIds = ['#type', '#date', '#location', '#weather', '#ammo', '#poi', '#glasses', '#ears'];
+                var fieldIds = ['#type', '#date', '#location'];
 
                 // Flag to track if all fields are valid
                 var allValid = true;
