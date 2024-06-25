@@ -29,10 +29,10 @@ if (isset($_GET['eventID'])) {
 
         // Check if file is a PDF and size is less than 5MB
         if ($fileExt != 'pdf') {
-            array_push($_SESSION['notifications'], array('success' => 'Only PDF files are allowed.'));
+            $errors[] = 'Only PDF files are allowed.';
         }
         if ($fileSize > 5 * 1024 * 1024) { // 5 MB
-            array_push($_SESSION['notifications'], array('success' => 'File size should not exceed 5 MB.'));
+            $errors[] = 'File size should not exceed 5 MB.';
         }
 
         // If no errors, proceed with the file upload and database insertion
@@ -55,12 +55,16 @@ if (isset($_GET['eventID'])) {
                     header('location:event-details.php?eventID=' . $eventID);
                     exit;
                 } else {
-                    $info .= "<div class='alert alert-danger'>Error: " . mysqli_error($conn) . "</div>";
+                    $info .= "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error: " . mysqli_error($conn) . "</div>";
                 }
 
                 mysqli_stmt_close($stmt);
             } else {
-                $info .= "<div class='alert alert-danger'>Error uploading file.</div>";
+                $info .= "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error uploading file.</div>";
+            }
+        }else{
+            foreach ($errors as $error) {
+                array_push($_SESSION['notifications'], array('error' => $error));
             }
         }
     }
@@ -201,7 +205,7 @@ if (isset($_GET['eventID'])) {
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p class="col-span-full text-center text-gray-600">No notes available for this event.</p>
+                            <p class="px-3 py-2 w-full mx-auto mb-3 bg-red-200 border-red-800 text-red-800 border rounded">No notes available for this event.</p>
                         <?php endif; ?>
                     </div>
                 </div>

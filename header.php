@@ -1,8 +1,11 @@
 <?php
 if (isset($_SESSION['notifications'])) {
-    foreach ($_SESSION['notifications'] as $type => $message) {
-        $classes = ($type == 'error') ? 'bg-red-200 border-red-800 text-red-800 ' : 'bg-green-200 border-green-800 text-green-800 ';
-        $info .= '<div class="px-3 py-2 mb-3 ' . $classes . ' border rounded">Event is created successfully!</div>';
+    // print_r($_SESSION['notifications']);
+    foreach ($_SESSION['notifications'] as $notification) {
+        foreach ($notification as $type => $message) {
+            $classes = ($type == 'error') ? 'bg-red-200 border-red-800 text-red-800 ' : 'bg-green-200 border-green-800 text-green-800 ';
+            $info .= '<div class="px-3 py-2 mb-3 ' . $classes . ' border rounded">'.$message.'</div>';
+        }
     }
     $_SESSION['notifications'] = array();
 }
