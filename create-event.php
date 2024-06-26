@@ -395,8 +395,8 @@ if (isset($_GET['eventID'])) {
                             <div class="mb-4">
                                 <label for="totalShots" class="block text-gray-700 text-sm font-bold mb-2">Total
                                     Shot</label>
-                                <input type="range" id="totalShots" value="0" name="totalShots" min="0" max="600"
-                                    class="range-input mt-2 w-full">
+                                <input type="number" id="totalShots" value="0" name="totalShots" min="0" max="600"
+                                    class="form-input w-full border p-1 rounded">
                                 <div id="totalShotsValue" class="text-center mt-2 text-blue-600 text-xl font-bold">0
                                 </div>
                                 <p class="inp-error"></p>

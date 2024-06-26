@@ -40,3 +40,4 @@ function isUserLoggedIn()
 }
 // This file can be included in other PHP files to use the $conn object for database operations
 ?>
+

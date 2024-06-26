@@ -166,8 +166,11 @@ if (isset($_GET['eventID'])) {
                                 echo '<tr>';
                                 echo '<th>Total Shot at: </th>' . '<td>' . $totalRounds * count($roundValues) . '</td>';
                                 echo '</tr>';
-                                echo '<tr class="last-tr">';
+                                echo '<tr>';
                                 echo '<th>Total Hit: </th>' . '<td>' . array_sum($roundValues) . '</td>';
+                                echo '</tr>';
+                                echo '<tr class="last-tr">';
+                                echo '<th>Hit Percentage: </th>' . '<td>' . number_format(array_sum($roundValues)/($totalRounds * count($roundValues)) * 100, 2, '.') . '%</td>';
                                 echo '</tr>';
                             }
                             echo '</table>';
