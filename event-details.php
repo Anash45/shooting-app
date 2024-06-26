@@ -128,7 +128,9 @@ if (isset($_GET['eventID'])) {
                             if ($field == 'eventID' || $field == 'user_id' || $field == 'createdAt' || $field == 'updatedAt') {
 
                             } else {
-
+                                if($field == "totalShots"){
+                                    $field = '<span style="white-space:nowrap;">Total Shot</span>';
+                                }
                                 echo '<tr>';
                                 echo '<th class="p-2 text-left">' . ucwords(str_replace("_", " ", $field)) . '</th>';
                                 echo '<td class="p-2">' . $value . '</td>';
@@ -159,7 +161,7 @@ if (isset($_GET['eventID'])) {
                                     $totalRounds = 50;
                                 }
                                 echo '<tr>';
-                                echo '<th>' . $roundType . ': </th>' . '<td>' . implode(', ', $roundValues) . '</td>';
+                                echo '<th>' . ucwords($roundType) . ': </th>' . '<td>' . implode(', ', $roundValues) . '</td>';
                                 echo '</tr>';
                                 echo '<tr>';
                                 echo '<th>Total Shot at: </th>' . '<td>' . $totalRounds * count($roundValues) . '</td>';

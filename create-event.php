@@ -4,7 +4,132 @@ if (!isUserLoggedIn()) {
     header('location:index.php');
     exit;
 }
-if ($_SERVER['REQUEST_METHOD'] == "POST") {
+// Check if eventID is set in the URL
+if (isset($_GET['eventID'])) {
+    $currentEventID = intval($_GET['eventID']);
+
+    // If the form is submitted
+    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        // print_r($_POST);
+        // Retrieve and sanitize form data
+        $updateEventID = $currentEventID; // This is safe because it's explicitly set
+        $updateType = mysqli_real_escape_string($conn, $_POST['type']);
+        $updateDate = date('Y-m-d', strtotime($_POST['date']));
+        $updateLocation = mysqli_real_escape_string($conn, $_POST['location']);
+        $updateWeather = mysqli_real_escape_string($conn, $_POST['weather']);
+        $updateAmmo = mysqli_real_escape_string($conn, $_POST['ammo']);
+        $updatePOI = mysqli_real_escape_string($conn, $_POST['poi']);
+        $updateGlasses = mysqli_real_escape_string($conn, $_POST['glasses']);
+        $updateEars = mysqli_real_escape_string($conn, $_POST['ears']);
+        $updateTotalShots = intval($_POST['totalShots']);
+
+        // Get the current timestamp for createdAt and updatedAt
+        $updateTimestamp = date('Y-m-d H:i:s');
+
+        // Begin transaction
+        mysqli_begin_transaction($conn);
+
+        try {
+            // Update the event details in the events table
+            $updateEventQuery = "
+                UPDATE events 
+                SET type = ?, date = ?, location = ?, weather = ?, ammo = ?, poi = ?, glasses = ?, ears = ?, totalShots = ?, updatedAt = ? 
+                WHERE eventID = ?";
+
+            $stmtUpdateEvent = mysqli_prepare($conn, $updateEventQuery);
+            mysqli_stmt_bind_param($stmtUpdateEvent, 'ssssssssisi', $updateType, $updateDate, $updateLocation, $updateWeather, $updateAmmo, $updatePOI, $updateGlasses, $updateEars, $updateTotalShots, $updateTimestamp, $updateEventID);
+            mysqli_stmt_execute($stmtUpdateEvent);
+            mysqli_stmt_close($stmtUpdateEvent);
+
+            // Delete existing rounds for the event
+            $deleteRoundsQuery = "DELETE FROM rounds WHERE eventID = ?";
+            $stmtDeleteRounds = mysqli_prepare($conn, $deleteRoundsQuery);
+            mysqli_stmt_bind_param($stmtDeleteRounds, 'i', $updateEventID);
+            mysqli_stmt_execute($stmtDeleteRounds);
+            mysqli_stmt_close($stmtDeleteRounds);
+
+            // Insert new rounds
+            $insertRoundQuery = "INSERT INTO rounds (eventID, round_type, rounds, createdAt, updatedAt) VALUES (?, ?, ?, ?, ?)";
+            $stmtInsertRound = mysqli_prepare($conn, $insertRoundQuery);
+            $createdTimestamp = $updateTimestamp; // For new entries, createdAt and updatedAt are the same
+
+            // Insert singles rounds
+            if (!empty($_POST['singles'])) {
+                foreach ($_POST['singles'] as $singleRound) {
+                    $singleRoundsValue = intval($singleRound);
+                    $roundType = 'singles';
+                    mysqli_stmt_bind_param($stmtInsertRound, 'isiss', $updateEventID, $roundType, $singleRoundsValue, $createdTimestamp, $updateTimestamp);
+                    mysqli_stmt_execute($stmtInsertRound);
+                }
+            }
+
+            // Insert handicap rounds
+            if (!empty($_POST['handicaps'])) {
+                foreach ($_POST['handicaps'] as $handicapRound) {
+                    $handicapRoundsValue = intval($handicapRound);
+                    $roundType = 'handicap';
+                    mysqli_stmt_bind_param($stmtInsertRound, 'isiss', $updateEventID, $roundType, $handicapRoundsValue, $createdTimestamp, $updateTimestamp);
+                    mysqli_stmt_execute($stmtInsertRound);
+                }
+            }
+
+            // Insert doubles rounds
+            if (!empty($_POST['doubles'])) {
+                foreach ($_POST['doubles'] as $doubleRound) {
+                    $doubleRoundsValue = intval($doubleRound);
+                    $roundType = 'doubles';
+                    mysqli_stmt_bind_param($stmtInsertRound, 'isiss', $updateEventID, $roundType, $doubleRoundsValue, $createdTimestamp, $updateTimestamp);
+                    mysqli_stmt_execute($stmtInsertRound);
+                }
+            }
+
+            mysqli_stmt_close($stmtInsertRound);
+
+            // Commit transaction
+            mysqli_commit($conn);
+
+            // Display success message
+            array_push($_SESSION['notifications'], array('success' => "Event and rounds updated successfully."));
+            // Optionally, you could redirect to another page
+            // header('Location: success_page.php');
+        } catch (Exception $e) {
+            // Rollback transaction on error
+            mysqli_rollback($conn);
+            array_push($_SESSION['notifications'], array('error' => "Error updating event: " . $e->getMessage() . ""));
+        }
+    }
+    
+    // Fetch event details from the database
+    $fetchEventQuery = "SELECT * FROM events WHERE eventID = ?";
+    $stmtFetchEvent = mysqli_prepare($conn, $fetchEventQuery);
+    mysqli_stmt_bind_param($stmtFetchEvent, 'i', $currentEventID);
+    mysqli_stmt_execute($stmtFetchEvent);
+    $eventResult = mysqli_stmt_get_result($stmtFetchEvent);
+
+    $eventDetails = [];
+    if ($eventResult && mysqli_num_rows($eventResult) > 0) {
+        $eventDetails = mysqli_fetch_assoc($eventResult);
+    } else {
+        array_push($_SESSION['notifications'], array('error' => "Event not found."));
+        exit;
+    }
+    mysqli_stmt_close($stmtFetchEvent);
+
+    // Fetch rounds details for the event
+    $fetchRoundsQuery = "SELECT * FROM rounds WHERE eventID = ?";
+    $stmtFetchRounds = mysqli_prepare($conn, $fetchRoundsQuery);
+    mysqli_stmt_bind_param($stmtFetchRounds, 'i', $currentEventID);
+    mysqli_stmt_execute($stmtFetchRounds);
+    $roundsResult = mysqli_stmt_get_result($stmtFetchRounds);
+
+    $roundsDetails = [];
+    if ($roundsResult && mysqli_num_rows($roundsResult) > 0) {
+        while ($roundRow = mysqli_fetch_assoc($roundsResult)) {
+            $roundsDetails[] = $roundRow;
+        }
+    }
+    mysqli_stmt_close($stmtFetchRounds);
+} elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
     // Main fields from $_POST array
     $userid = $_SESSION['user_id'];
     $type = $_POST['type'];
@@ -75,6 +200,29 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="dist/styles.css" rel="stylesheet">
         <link href="dist/custom.css?v=3" rel="stylesheet">
+        <script>
+            function populateForm() {
+                <?php if (isset($eventDetails)): ?>
+                    $('#type').val("<?php echo ($eventDetails['type']); ?>").trigger('change');
+                    $('#date').val("<?php echo (date('m/d/Y', strtotime($eventDetails['date']))); ?>");
+                    $('#totalShots').val("<?php echo ($eventDetails['totalShots']); ?>");
+                    updateTotalShots();
+                    $('#location').val("<?php echo $eventDetails['location']; ?>").trigger('change');
+                    $('#weather').val("<?php echo ($eventDetails['weather']); ?>");
+                    $('#ammo').val("<?php echo ($eventDetails['ammo']); ?>").trigger('change');
+                    $('#poi').val("<?php echo ($eventDetails['poi']); ?>").trigger('change');
+                    $('#glasses').val("<?php echo ($eventDetails['glasses']); ?>").trigger('change');
+                    $('#ears').val("<?php echo ($eventDetails['ears']); ?>").trigger('change');
+
+                    <?php foreach ($roundsDetails as $roundRow): ?>
+                        addRound("<?php echo $roundRow['round_type']; ?>", <?php echo $roundRow['rounds']; ?>);
+                    <?php endforeach; ?>
+                <?php endif; ?>
+            }
+
+            // Call populateForm when the page loads
+            window.onload = populateForm;
+        </script>
     </head>
 
     <body class="home-bg pb-10 flex flex-col justify-center">
@@ -86,6 +234,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 <div class="tab-content active" id="tab1">
                     <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
                         <h2 class="text-center text-2xl font-bold mb-4">Create Event</h2>
+                        <?php echo $info; ?>
                         <!-- Type (Drop Down) -->
                         <div class="mb-4">
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="type">Type <span
@@ -245,10 +394,10 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                             </div>
                             <div class="mb-4">
                                 <label for="totalShots" class="block text-gray-700 text-sm font-bold mb-2">Total
-                                    Shots</label>
-                                <input type="range" id="totalShots" value="0" name="totalShots" min="1" max="600"
+                                    Shot</label>
+                                <input type="range" id="totalShots" value="0" name="totalShots" min="0" max="600"
                                     class="range-input mt-2 w-full">
-                                <div id="totalShotsValue" class="text-center mt-2 text-blue-600 text-xl font-bold">300
+                                <div id="totalShotsValue" class="text-center mt-2 text-blue-600 text-xl font-bold">0
                                 </div>
                                 <p class="inp-error"></p>
                             </div>
@@ -258,19 +407,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                 <legend class="font-bold text-center block mb-3 text-white">Singles</legend>
                             </div>
                             <div id="singles" class="rounds-cont">
-                                <div class="mb-4 single round-type">
-                                    <label for="signlesR1"
-                                        class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Singles
-                                            <span class="round-count-num">1</span>/8</span>
-                                        <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn"
-                                            type="button" onclick="removeRound(event)"><i
-                                                class="fa fa-minus"></i></button>
-                                    </label>
-                                    <input type="number" required id="signlesR1" name="singles[]" min="0" max="25"
-                                        class="form-input w-full border p-1 rounded">
-                                    <p class="text-xs text-gray-900 p-1">0-25 singles per round.</p>
-                                    <p class="inp-error"></p>
-                                </div>
                             </div>
                             <button type="button"
                                 class="text-white bg-blue-600 px-2 py-1 rounded-md hover:bg-blue-700 text-xs"
@@ -281,19 +417,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                 <legend class="font-bold text-center block mb-3 text-white">Handicap</legend>
                             </div>
                             <div id="handicap" class="rounds-cont">
-                                <div class="mb-4 handicap round-type">
-                                    <label for="signlesR1"
-                                        class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Handicap
-                                            Round <span class="round-count-num">1</span>/8</span>
-                                        <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn"
-                                            type="button" onclick="removeRound(event)"><i
-                                                class="fa fa-minus"></i></button>
-                                    </label>
-                                    <input type="number" required id="signlesR1" name="handicaps[]" min="0" max="25"
-                                        class="form-input w-full border p-1 rounded">
-                                    <p class="text-xs text-gray-900 p-1">0-25 handicaps per round.</p>
-                                    <p class="inp-error"></p>
-                                </div>
                             </div>
                             <button type="button"
                                 class="text-white bg-blue-600 px-2 py-1 rounded-md hover:bg-blue-700 text-xs"
@@ -304,19 +427,6 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                                 <legend class="font-bold text-center block mb-3 text-white">Doubles</legend>
                             </div>
                             <div id="doubles" class="rounds-cont">
-                                <div class="mb-4 double round-type">
-                                    <label for="doubleR1"
-                                        class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Doubles
-                                            Round <span class="round-count-num">1</span>/4</span>
-                                        <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn"
-                                            type="button" onclick="removeRound(event)"><i
-                                                class="fa fa-minus"></i></button>
-                                    </label>
-                                    <input type="number" required id="doubleR1" name="doubles[]" min="0" max="50"
-                                        class="form-input w-full border p-1 rounded">
-                                    <p class="text-xs text-gray-900 p-1">0-50 doubles per round.</p>
-                                    <p class="inp-error"></p>
-                                </div>
                             </div>
                             <button type="button"
                                 class="text-white bg-blue-600 px-2 py-1 rounded-md hover:bg-blue-700 text-xs"
@@ -380,16 +490,20 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 var tabId = $(this).attr('data-target'); // Get the ID of the tab to show
                 showTab(tabId); // Show the tab content
             });
+            function updateTotalShots() {
+                $('#totalShotsValue').text($('#totalShots').val());
+            }
             $(document).ready(function () {
                 // Update the displayed value as the slider is moved
                 $('#totalShots').on('input', function () {
-                    $('#totalShotsValue').text($(this).val());
+                    updateTotalShots();
                 });
                 checkRoundCounts();
+                updateTotalShots();
             });
 
-            function addRound(roundType) {
-                if (roundType === 'singles') {
+            function addRound(roundType, shots = '') {
+                if (roundType.toLowerCase() === 'singles') {
                     // Count the number of existing singles rounds
                     const singleCount = $('#singles .single').length;
 
@@ -401,14 +515,14 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
-                        <input type="number" required id="singlesR${singleCount + 1}" name="singles[]" min="0" max="25"
+                        <input type="number" required id="singlesR${singleCount + 1}" name="singles[]" value="${shots}" min="0" max="25"
                             class="form-input w-full border p-1 rounded">
                         <p class="text-xs text-gray-900 p-1">0-25 singles per round.</p>
                         <p class="inp-error"></p>
                     </div>
                 `);
                     }
-                } else if (roundType === 'doubles') {
+                } else if (roundType.toLowerCase() === 'doubles') {
                     // Count the number of existing doubles rounds
                     const doubleCount = $('#doubles .double').length;
 
@@ -420,7 +534,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
-                        <input type="number" required id="doublesR${doubleCount + 1}" name="doubles[]" min="0" max="50"
+                        <input type="number" required id="doublesR${doubleCount + 1}" name="doubles[]" value="${shots}" min="0" max="50"
                             class="form-input w-full border p-1 rounded">
                         <p class="text-xs text-gray-900 p-1">0-50 doubles per round.</p>
                         <p class="inp-error"></p>
@@ -428,7 +542,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                 `);
                     }
 
-                } else if (roundType === 'handicap') {
+                } else if (roundType.toLowerCase() === 'handicap') {
                     // Count the number of existing handicap rounds
                     const handicapCount = $('#handicap .handicap').length;
 
@@ -440,7 +554,7 @@ if ($_SERVER['REQUEST_METHOD'] == "POST") {
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
-                        <input type="number" required id="handicapR${handicapCount + 1}" name="handicaps[]" min="0" max="30"
+                        <input type="number" required id="handicapR${handicapCount + 1}" name="handicaps[]" value="${shots}" min="0" max="30"
                             class="form-input w-full border p-1 rounded">
                         <p class="text-xs text-gray-900 p-1">0-30 handicap per round.</p>
                         <p class="inp-error"></p>
