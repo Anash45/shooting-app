@@ -199,7 +199,7 @@ if (isset($_GET['eventID'])) {
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css?v=3" rel="stylesheet">
+        <link href="dist/custom.css?v=4" rel="stylesheet">
         <script>
             function populateForm() {
                 <?php if (isset($eventDetails)): ?>
@@ -386,7 +386,7 @@ if (isset($_GET['eventID'])) {
                     </div>
                 </div>
                 <div class="tab-content" id="tab2">
-                    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
+                    <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
                         <h2 class="text-center text-2xl font-bold mb-4">Rounds</h2>
                         <fieldset class="py-4">
                             <div class="relative">
@@ -449,7 +449,7 @@ if (isset($_GET['eventID'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
             integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="assets/js/script.js?v=3"></script>
+        <script src="assets/js/script.js?v=4"></script>
         <script>
             // Initialize Select2 for dropdowns
             $('.form-select2').select2();

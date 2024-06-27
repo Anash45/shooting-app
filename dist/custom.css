@@ -16,10 +16,14 @@ body {
     background-repeat: no-repeat;
 }
 
+.h-logo {
+    height: 60px;
+}
+
 .glass {
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    background-color: rgb(255 255 255 / 60%);
+    /* backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px); */
+    background-color: rgb(255 255 255);
 }
 
 .inp-error {
@@ -52,7 +56,15 @@ legend::after {
 .select2-container--default .select2-selection--single {
     padding: 0.25rem !important;
     height: unset !important;
-    border-color: rgb(229 231 235);
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid rgb(139, 139, 139);
+}
+
+.form-input {
+    border: 0;
+    border-radius: 0;
+    border-bottom: 1px solid rgb(139, 139, 139);
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {
@@ -121,15 +133,17 @@ td {
     max-width: 100%;
 }
 
-.note{
+.note {
     position: relative;
 }
-.thumb-pin{
+
+.thumb-pin {
     position: absolute;
     right: 5px;
     top: 5px;
     height: 40px;
 }
+
 .truncate {
     overflow: hidden;
     white-space: nowrap;

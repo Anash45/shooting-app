@@ -28,7 +28,7 @@
             </div>
             <div class="mb-4">
                 <label for="file-upload" class="block text-gray-700">Upload PDF</label>
-                <input type="file" id="file-upload" name="file-upload" accept=".pdf"
+                <input type="file" id="file-upload" name="file-upload" accept=".pdf,.png,.jpg,.jpeg,.gif,.svg"
                     class="w-full px-3 py-2 border rounded">
                 <p class="text-xs text-gray-600">Only PDF files are allowed.</p>
             </div>

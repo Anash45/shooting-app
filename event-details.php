@@ -9,60 +9,82 @@ if (isset($_GET['eventID'])) {
     $userID = $_SESSION['user_id'];
     // Check if the form is submitted
     // Check if the form is submitted
+    // If the form is submitted
     if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Retrieve the userID from session and eventID from GET
 
         // Get other form data
         $title = mysqli_real_escape_string($conn, $_POST['title']);
         $description = mysqli_real_escape_string($conn, $_POST['description']);
 
-        // File upload handling
-        $uploadDir = 'uploads/';
-        $file = $_FILES['file-upload'];
-        $fileName = basename($file['name']);
-        $fileTmpPath = $file['tmp_name'];
-        $fileSize = $file['size'];
-        $fileType = $file['type'];
-        $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+        // Initialize file handling variables
+        $fileUploaded = false;
+        $newFileName = '';
 
-        $errors = [];
+        // Check if a file is uploaded
+        if (!empty($_FILES['file-upload']['name'])) {
+            // File upload handling
+            $uploadDir = 'uploads/';
+            $file = $_FILES['file-upload'];
+            $fileName = basename($file['name']);
+            $fileTmpPath = $file['tmp_name'];
+            $fileSize = $file['size'];
+            $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
 
-        // Check if file is a PDF and size is less than 5MB
-        if ($fileExt != 'pdf') {
-            $errors[] = 'Only PDF files are allowed.';
+            $allowedExtensions = ['pdf', 'png', 'jpg', 'jpeg', 'svg', 'gif'];
+            $errors = [];
+
+            // Validate file extension
+            if (!in_array($fileExt, $allowedExtensions)) {
+                $errors[] = 'Invalid file type. Only PDF, PNG, JPG, JPEG, SVG, and GIF files are allowed.';
+            }
+            // Validate file size (5 MB max)
+            if ($fileSize > 5 * 1024 * 1024) { // 5 MB
+                $errors[] = 'File size should not exceed 5 MB.';
+            }
+
+            // If no errors, proceed with the file upload
+            if (empty($errors)) {
+                // Generate a unique file name to avoid overwriting
+                $newFileName = uniqid('file_', true) . '.' . $fileExt;
+                $destPath = $uploadDir . $newFileName;
+
+                // Move the file to the desired directory
+                if (move_uploaded_file($fileTmpPath, $destPath)) {
+                    $fileUploaded = true;
+                } else {
+                    $errors[] = 'Error uploading file.';
+                }
+            }
         }
-        if ($fileSize > 5 * 1024 * 1024) { // 5 MB
-            $errors[] = 'File size should not exceed 5 MB.';
-        }
 
-        // If no errors, proceed with the file upload and database insertion
+        // Check for errors before proceeding
         if (empty($errors)) {
-            // Generate a unique file name to avoid overwriting
-            $newFileName = uniqid('file_', true) . '.' . $fileExt;
-            $destPath = $uploadDir . $newFileName;
-
-            // Move the file to the desired directory
-            if (move_uploaded_file($fileTmpPath, $destPath)) {
-                // Prepare and execute the insert query
-                $createdAt = date('Y-m-d H:i:s');
+            // Prepare the query based on whether a file was uploaded
+            $createdAt = date('Y-m-d H:i:s');
+            if ($fileUploaded) {
                 $query = "INSERT INTO notes (userID, eventID, title, description, file, created_at, updated_at)
-                      VALUES (?, ?, ?, ?, ?, ?, ?)";
+                          VALUES (?, ?, ?, ?, ?, ?, ?)";
                 $stmt = mysqli_prepare($conn, $query);
                 mysqli_stmt_bind_param($stmt, 'iisssss', $userID, $eventID, $title, $description, $newFileName, $createdAt, $createdAt);
-
-                if (mysqli_stmt_execute($stmt)) {
-                    array_push($_SESSION['notifications'], array('success' => 'Note added successfully'));
-                    header('location:event-details.php?eventID=' . $eventID);
-                    exit;
-                } else {
-                    $info .= "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error: " . mysqli_error($conn) . "</div>";
-                }
-
-                mysqli_stmt_close($stmt);
             } else {
-                $info .= "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error uploading file.</div>";
+                $query = "INSERT INTO notes (userID, eventID, title, description, created_at, updated_at)
+                          VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt = mysqli_prepare($conn, $query);
+                mysqli_stmt_bind_param($stmt, 'iissss', $userID, $eventID, $title, $description, $createdAt, $createdAt);
             }
-        }else{
+
+            // Execute the query
+            if (mysqli_stmt_execute($stmt)) {
+                array_push($_SESSION['notifications'], array('success' => 'Note added successfully'));
+                header('location:event-details.php?eventID=' . $eventID);
+                exit;
+            } else {
+                echo "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error: " . mysqli_error($conn) . "</div>";
+            }
+
+            mysqli_stmt_close($stmt);
+        } else {
+            // Display errors
             foreach ($errors as $error) {
                 array_push($_SESSION['notifications'], array('error' => $error));
             }
@@ -98,7 +120,7 @@ if (isset($_GET['eventID'])) {
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css?v=3" rel="stylesheet">
+        <link href="dist/custom.css?v=4" rel="stylesheet">
     </head>
 
     <body class="home-bg pb-10 flex flex-col justify-center">
@@ -106,7 +128,7 @@ if (isset($_GET['eventID'])) {
         include ('./header.php');
         ?>
         <main class="mt-10">
-            <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
+            <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
                 <h2 class="text-center text-2xl font-bold mb-4">Event Details</h2>
                 <?php echo $info; ?>
                 <?php
@@ -128,7 +150,7 @@ if (isset($_GET['eventID'])) {
                             if ($field == 'eventID' || $field == 'user_id' || $field == 'createdAt' || $field == 'updatedAt') {
 
                             } else {
-                                if($field == "totalShots"){
+                                if ($field == "totalShots") {
                                     $field = '<span style="white-space:nowrap;">Total Shot</span>';
                                 }
                                 echo '<tr>';
@@ -170,7 +192,7 @@ if (isset($_GET['eventID'])) {
                                 echo '<th>Total Hit: </th>' . '<td>' . array_sum($roundValues) . '</td>';
                                 echo '</tr>';
                                 echo '<tr class="last-tr">';
-                                echo '<th>Hit Percentage: </th>' . '<td>' . number_format(array_sum($roundValues)/($totalRounds * count($roundValues)) * 100, 2, '.') . '%</td>';
+                                echo '<th>Hit Percentage: </th>' . '<td>' . number_format(array_sum($roundValues) / ($totalRounds * count($roundValues)) * 100, 2, '.') . '%</td>';
                                 echo '</tr>';
                             }
                             echo '</table>';
@@ -204,13 +226,14 @@ if (isset($_GET['eventID'])) {
                                         <a href="uploads/<?php echo htmlspecialchars($note['file']); ?>" target="_blank"
                                             class="mt-2 inline-flex items-center text-blue-600 hover:underline">
                                             <i class="fa fa-file mr-2"></i>
-                                            <span>View PDF</span>
+                                            <span>View File</span>
                                         </a>
                                     <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
-                            <p class="px-3 py-2 w-full mx-auto mb-3 bg-red-200 border-red-800 text-red-800 border rounded">No notes available for this event.</p>
+                            <p class="px-3 py-2 w-full mx-auto mb-3 bg-red-200 border-red-800 text-red-800 border rounded">
+                                No notes available for this event.</p>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -224,7 +247,7 @@ if (isset($_GET['eventID'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
             integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="assets/js/script.js?v=3"></script>
+        <script src="assets/js/script.js?v=4"></script>
     </body>
 
 </html>
