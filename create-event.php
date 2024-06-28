@@ -199,7 +199,7 @@ if (isset($_GET['eventID'])) {
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css?v=4" rel="stylesheet">
+        <link href="dist/custom.css?v=5" rel="stylesheet">
         <script>
             function populateForm() {
                 <?php if (isset($eventDetails)): ?>
@@ -232,7 +232,7 @@ if (isset($_GET['eventID'])) {
         <main class="mt-10">
             <form action="" method="POST" oninput="validateFields()">
                 <div class="tab-content active" id="tab1">
-                    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
+                    <div class="bg-white shadow-md rounded border-b-orange px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
                         <h2 class="text-center text-2xl font-bold mb-4">Create Event</h2>
                         <?php echo $info; ?>
                         <!-- Type (Drop Down) -->
@@ -379,14 +379,14 @@ if (isset($_GET['eventID'])) {
                         </div>
                         <div class="flex items-center justify-between">
                             <button
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline nav-tab"
+                                class="btn-create text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline nav-tab"
                                 type="button" id="firstBtn" data-target="tab2">Next <i
                                     class="fa fa-arrow-right"></i></button>
                         </div>
                     </div>
                 </div>
                 <div class="tab-content" id="tab2">
-                    <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
+                    <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 border-b-orange mb-4 max-w-lg glass w-full mx-auto">
                         <h2 class="text-center text-2xl font-bold mb-4">Rounds</h2>
                         <fieldset class="py-4">
                             <div class="relative">
@@ -437,7 +437,7 @@ if (isset($_GET['eventID'])) {
                                 class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline nav-tab"
                                 type="button" data-target="tab1"><i class="fa fa-arrow-left"></i> Back</button>
                             <button
-                                class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                class="btn-create text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                                 type="submit" id="submitBtn">Submit <i class="fa fa-arrow-right"></i></button>
                         </div>
                     </div>
@@ -449,7 +449,7 @@ if (isset($_GET['eventID'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
             integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="assets/js/script.js?v=4"></script>
+        <script src="assets/js/script.js?v=5"></script>
         <script>
             // Initialize Select2 for dropdowns
             $('.form-select2').select2();

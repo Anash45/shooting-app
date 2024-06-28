@@ -120,7 +120,7 @@ if (isset($_GET['eventID'])) {
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css?v=4" rel="stylesheet">
+        <link href="dist/custom.css?v=5" rel="stylesheet">
     </head>
 
     <body class="home-bg pb-10 flex flex-col justify-center">
@@ -128,7 +128,7 @@ if (isset($_GET['eventID'])) {
         include ('./header.php');
         ?>
         <main class="mt-10">
-            <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
+            <div class="bg-white border-b-orange shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
                 <h2 class="text-center text-2xl font-bold mb-4">Event Details</h2>
                 <?php echo $info; ?>
                 <?php
@@ -203,12 +203,12 @@ if (isset($_GET['eventID'])) {
             </div>
             <div class="container mx-auto">
                 <div class="pt-10">
-                    <h2 class="text-3xl text-center font-bold mb-4 text-black p-3 glass">Notes</h2>
+                    <h2 class="text-3xl text-center font-bold mb-4 text-black p-3 glass rounded-lg border-b-orange">Notes</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <?php if (!empty($notes)): ?>
                             <?php foreach ($notes as $note): ?>
                                 <div
-                                    class="bg-white p-4 rounded-lg shadow-md border border-gray-200 flex flex-col justify-between note">
+                                    class="bg-white p-4 rounded-lg border-b-orange shadow-md border border-gray-200 flex flex-col justify-between note">
                                     <img src="./assets/images/thumb-pin.png" alt="Thumb Pin" class="thumb-pin">
                                     <div>
                                         <h3 class="text-lg font-semibold mb-2"><?php echo htmlspecialchars($note['title']); ?>
@@ -247,7 +247,7 @@ if (isset($_GET['eventID'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
             integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="assets/js/script.js?v=4"></script>
+        <script src="assets/js/script.js?v=5"></script>
     </body>
 
 </html>

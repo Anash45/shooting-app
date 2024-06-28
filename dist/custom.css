@@ -8,14 +8,41 @@ body {
 }
 
 .home-bg {
-    background-image: url('../assets/images/bg-1.jpeg');
+    background-image: linear-gradient(#000000b7,#000000b7), url('../assets/images/bg-1.jpeg');
     /* Adjust background properties as needed */
     background-size: cover;
     background-attachment: fixed;
     background-position: bottom;
     background-repeat: no-repeat;
 }
+.border-b-orange{
+    border-bottom: 4px solid #ef5f24;
+}
+.text-orange{
+    color: #ef5f24;
+}
 
+.btn-logout{
+    background-color: #df0000;
+}
+
+.btn-logout:hover{
+    background-color: #c50000;
+}
+
+.bg-orange{
+    background-color: #ef5f24;
+}
+header{
+    border-bottom: 3px solid #ef5f24;
+}
+.btn-create{
+    background-color: #ef5f24;
+}
+
+.btn-create:hover{
+    background-color: #c93900;
+}
 .h-logo {
     height: 60px;
 }
@@ -58,13 +85,13 @@ legend::after {
     height: unset !important;
     border: 0;
     border-radius: 0;
-    border-bottom: 1px solid rgb(139, 139, 139);
+    border-bottom: 1px solid #ef5f24;
 }
 
 .form-input {
     border: 0;
     border-radius: 0;
-    border-bottom: 1px solid rgb(139, 139, 139);
+    border-bottom: 1px solid #ef5f24;
 }
 
 .select2-container--default .select2-selection--single .select2-selection__arrow {

@@ -33,7 +33,7 @@ if (isset($_REQUEST['delete'])) {
             integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css?v=4" rel="stylesheet">
+        <link href="dist/custom.css?v=5" rel="stylesheet">
     </head>
 
     <body class="home-bg flex flex-col">
@@ -43,7 +43,7 @@ if (isset($_REQUEST['delete'])) {
             ?>
             <main class="py-5 h-100vh">
                 <div class="container">
-                    <h3 class="text-3xl font-bold text-center text-blue-600">My Events</h3>
+                    <h3 class="text-3xl font-bold text-center text-white">My Events</h3>
                     <div class="events py-10">
                         <?php echo $info; ?>
                         <?php
@@ -61,9 +61,9 @@ if (isset($_REQUEST['delete'])) {
                                 $date = $row['date'];
 
                                 // Generate HTML structure for each event
-                                echo '<div class="bg-white event shadow-md rounded-md p-3 mb-4">';
+                                echo '<div class="bg-white event shadow-md rounded-md p-3 mb-4 event border-b-orange">';
                                 echo '<div class="flex justify-between gap-3 mb-2">';
-                                echo '<h4 class="font-bold sm:text-2xl text-lg text-blue-900">' . $location . '</h4>';
+                                echo '<h4 class="font-bold sm:text-2xl text-lg text-orange">' . $location . '</h4>';
                                 echo '<div>';
                                 echo '<div class="flex items-center gap-1"><a href="create-event.php?eventID=' . $eventID . '" class="px-2 text-xs py-1 rounded bg-blue-700 hover:bg-blue-800 text-white"><i class="fa fa-edit"></i></a> <a onclick="return confirm(\'Do you really want to delete this event?\');" href="?delete=' . $eventID . '" class="px-2 text-xs py-1 rounded bg-red-700 hover:bg-red-800 text-white"><i class="fa fa-trash"></i></a></div>';
                                 echo '</div>';
@@ -86,7 +86,7 @@ if (isset($_REQUEST['delete'])) {
             </main>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <script src="assets/js/script.js?v=4"></script>
+        <script src="assets/js/script.js?v=5"></script>
     </body>
 
 </html>

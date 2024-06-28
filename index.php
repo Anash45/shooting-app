@@ -30,7 +30,7 @@ if(isUserLoggedIn()){
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <script src="assets/js/script.js?v=4"></script>
+        <script src="assets/js/script.js?v=5"></script>
         <script>
             // Function to handle the credential response
             function handleCredentialResponse(response) {
