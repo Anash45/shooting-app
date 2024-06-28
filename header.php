@@ -35,7 +35,7 @@ if (isset($_SESSION['notifications'])) {
                 </div>
             </div>
                 <a href="./dashboard.php"
-                    class="text-gray-700 cursor-pointer hover:text-gray-800 font-bold py-2 px-0 rounded focus:outline-none focus:shadow-outline"><i
+                    class="text-gray-700 nav-link cursor-pointer hover:text-gray-800 font-bold py-2 px-0 rounded focus:outline-none focus:shadow-outline"><i
                         class="fa fa-home"></i> Home</a>
                 <a href="./create-event.php"
                     class="text-white font-bold py-1 px-3 btn-create rounded focus:outline-none focus:shadow-outline"><i

@@ -21,7 +21,9 @@ body {
 .text-orange{
     color: #ef5f24;
 }
-
+.nav-link:hover{
+    color: #ef5f24 !important;
+}
 .btn-logout{
     background-color: #df0000;
 }
