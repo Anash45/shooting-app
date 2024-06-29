@@ -12,8 +12,8 @@ if(isUserLoggedIn()){
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Clay Shooting</title>
-        <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css" rel="stylesheet">
+        <link href="dist/styles.css?v=6" rel="stylesheet">
+        <link href="dist/custom.css?v=6" rel="stylesheet">
         <script src="https://accounts.google.com/gsi/client" async defer></script>
         <div id="g_id_onload" data-client_id="816473627869-i3cqai8sstv6e0ppiq5cbq86k4rbp06l"
             data-callback="handleCredentialResponse">
@@ -21,8 +21,9 @@ if(isUserLoggedIn()){
     </head>
 
     <body class="home-bg py-10 flex flex-col justify-center">
-        <div class="bg-white shadow-md rounded px-8 pt-8 pb-8 mb-4 flex flex-col w-fit mx-auto glass">
+        <div class="bg-white shadow-md rounded px-4 pt-4 border-b-orange pb-4 mb-4 flex flex-col w-fit mx-auto glass">
             <div class="flex flex-col justify-center items-center">
+                <img src="./assets/images/TheClayground-01.png" alt="Logo" class="h-20 mb-3">
                 <div class="g_id_signin" data-type="standard"></div>
                 <div id="response">
                     
@@ -30,7 +31,7 @@ if(isUserLoggedIn()){
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <script src="assets/js/script.js?v=5"></script>
+        <script src="assets/js/script.js?v=6"></script>
         <script>
             // Function to handle the credential response
             function handleCredentialResponse(response) {
