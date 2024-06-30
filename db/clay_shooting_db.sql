@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 12, 2024 at 04:32 PM
+-- Generation Time: Jun 30, 2024 at 02:42 AM
 -- Server version: 8.0.35
 -- PHP Version: 8.2.0
 
@@ -38,16 +38,27 @@ CREATE TABLE `events` (
   `poi` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `glasses` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
   `ears` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `totalShots` int NOT NULL,
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+-- --------------------------------------------------------
+
 --
--- Dumping data for table `events`
+-- Table structure for table `notes`
 --
 
-INSERT INTO `events` (`eventID`, `user_id`, `type`, `date`, `location`, `weather`, `ammo`, `poi`, `glasses`, `ears`, `createdAt`, `updatedAt`) VALUES
-(2, '117878659336716057989', 'Registered', '2024-06-10', 'West Albany Rod & Gun Club Inc - 100 Willoughby Dr, Albany, NY 12205', 'Good', 'Federal Top Gun 1145fps 1 1/8 oz. Size 7.5', '60/40', 'Pilla 53CIK', 'Foam/Music', '2024-06-12 13:58:53', '2024-06-12 13:58:53');
+CREATE TABLE `notes` (
+  `id` int NOT NULL,
+  `userID` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `eventID` int NOT NULL,
+  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `description` text COLLATE utf8mb4_general_ci,
+  `file` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -63,16 +74,6 @@ CREATE TABLE `rounds` (
   `createdAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   `updatedAt` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `rounds`
---
-
-INSERT INTO `rounds` (`roundID`, `eventID`, `round_type`, `rounds`, `createdAt`, `updatedAt`) VALUES
-(7, 2, 'Singles', 3, '2024-06-12 13:58:53', '2024-06-12 13:58:53'),
-(8, 2, 'Handicap', 6, '2024-06-12 13:58:53', '2024-06-12 13:58:53'),
-(9, 2, 'Doubles', 10, '2024-06-12 13:58:53', '2024-06-12 13:58:53'),
-(10, 2, 'Doubles', 20, '2024-06-12 13:58:53', '2024-06-12 13:58:53');
 
 -- --------------------------------------------------------
 
@@ -90,14 +91,6 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `users`
---
-
-INSERT INTO `users` (`id`, `google_id`, `email`, `name`, `picture`, `created_at`) VALUES
-(1, '117878659336716057989', 'f4futuretech@gmail.com', 'Future Tech', 'https://lh3.googleusercontent.com/a/ACg8ocJtkK_9hgj1WvOaTM3Mzl4JQ2ITFFD-aJRyK-d_DU8Hiz5gg3yl=s96-c', '2024-06-11 20:47:03'),
-(2, '102918864814109964815', 'anas14529@gmail.com', 'Future Tech (Anas Bukhari)', 'https://lh3.googleusercontent.com/a/ACg8ocJkklSxtBNQwXUE8IJUiZKHkTe22q6D2f4KEasjxMIEluDvWdRotA=s96-c', '2024-06-11 20:47:43');
-
---
 -- Indexes for dumped tables
 --
 
@@ -107,6 +100,14 @@ INSERT INTO `users` (`id`, `google_id`, `email`, `name`, `picture`, `created_at`
 ALTER TABLE `events`
   ADD PRIMARY KEY (`eventID`),
   ADD KEY `fk_google_id` (`user_id`);
+
+--
+-- Indexes for table `notes`
+--
+ALTER TABLE `notes`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `eventID` (`eventID`),
+  ADD KEY `notes_ibfk_1` (`userID`);
 
 --
 -- Indexes for table `rounds`
@@ -130,19 +131,25 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `eventID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `eventID` int NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `notes`
+--
+ALTER TABLE `notes`
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `rounds`
 --
 ALTER TABLE `rounds`
-  MODIFY `roundID` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `roundID` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -153,6 +160,13 @@ ALTER TABLE `users`
 --
 ALTER TABLE `events`
   ADD CONSTRAINT `fk_google_id` FOREIGN KEY (`user_id`) REFERENCES `users` (`google_id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `notes`
+--
+ALTER TABLE `notes`
+  ADD CONSTRAINT `notes_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `users` (`google_id`),
+  ADD CONSTRAINT `notes_ibfk_2` FOREIGN KEY (`eventID`) REFERENCES `events` (`eventID`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `rounds`

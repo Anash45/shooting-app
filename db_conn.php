@@ -5,9 +5,9 @@
 session_start();
 // Database connection parameters
 $servername = "localhost";
-$username = "u956940883_clay_shooting";
+$username = "clay_shooting";
 $password = "6B?ATRfFBU*c";
-$dbname = "u956940883_clay_shooting";
+$dbname = "clay_shooting";
 
 $info = '';
 // $servername = "localhost";

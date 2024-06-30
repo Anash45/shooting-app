@@ -15,7 +15,7 @@ if(isUserLoggedIn()){
         <link href="dist/styles.css?v=6" rel="stylesheet">
         <link href="dist/custom.css?v=6" rel="stylesheet">
         <script src="https://accounts.google.com/gsi/client" async defer></script>
-        <div id="g_id_onload" data-client_id="816473627869-i3cqai8sstv6e0ppiq5cbq86k4rbp06l"
+        <div id="g_id_onload" data-client_id="816473627869-0v2j3calunt3mged7uvi5pk2p8b3e113"
             data-callback="handleCredentialResponse">
         </div>
     </head>
