@@ -3,7 +3,7 @@ require_once 'vendor/autoload.php';
 require 'db_conn.php'; // Include the database connection file
 
 // Initialize the Google client
-$client = new Google_Client(['client_id' => '816473627869-i3cqai8sstv6e0ppiq5cbq86k4rbp06l.apps.googleusercontent.com']); // Replace with your actual Client ID
+$client = new Google_Client(['client_id' => '816473627869-0v2j3calunt3mged7uvi5pk2p8b3e113.apps.googleusercontent.com']); // Replace with your actual Client ID
 
 // Get the JWT token from the POST request
 $token = json_decode(file_get_contents('php://input'), true)['token'];
