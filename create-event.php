@@ -464,7 +464,7 @@ if (isset($_GET['eventID'])) {
                         // Append new singles round HTML with updated round number
                         $('#singles').append(`
                     <div class="mb-4 single round-type">
-                        <label for="singlesR${singleCount + 1}" class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Singles Round <span class="round-count-num">${singleCount + 1}</span>/8</span>
+                        <label for="singlesR${singleCount + 1}" class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Singles Round <span class="round-count-num">${singleCount + 1}</span></span>
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
@@ -483,7 +483,7 @@ if (isset($_GET['eventID'])) {
                         // Append new doubles round HTML with updated round number (Placeholder example)
                         $('#doubles').append(`
                     <div class="mb-4 double round-type">
-                        <label for="doublesR${doubleCount + 1}" class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Doubles Round <span class="round-count-num">${doubleCount + 1}</span>/4</span>
+                        <label for="doublesR${doubleCount + 1}" class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Doubles Round <span class="round-count-num">${doubleCount + 1}</span></span>
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
@@ -503,13 +503,13 @@ if (isset($_GET['eventID'])) {
                         // Append new handicap round HTML with updated round number (Placeholder example)
                         $('#handicap').append(`
                     <div class="mb-4 handicap round-type">
-                        <label for="handicapR${handicapCount + 1}" class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Handicap Round <span class="round-count-num">${handicapCount + 1}</span>/8</span>
+                        <label for="handicapR${handicapCount + 1}" class="text-gray-700 text-sm font-bold mb-2 flex items-center justify-between"><span>Handicap Round <span class="round-count-num">${handicapCount + 1}</span></span>
                         <button class="text-xs bg-red-700 text-white px-1 rounded-sm remove-btn" type="button"
                                             onclick="removeRound(event)"><i class="fa fa-minus"></i></button>
                         </label>
-                        <input type="number" required id="handicapR${handicapCount + 1}" name="handicaps[]" value="${shots}" min="0" max="30"
+                        <input type="number" required id="handicapR${handicapCount + 1}" name="handicaps[]" value="${shots}" min="0" max="25"
                             class="form-input w-full border p-1 rounded">
-                        <p class="text-xs text-gray-900 p-1">0-30 handicap per round.</p>
+                        <p class="text-xs text-gray-900 p-1">0-25 handicap per round.</p>
                         <p class="inp-error"></p>
                     </div>
                 `);
