@@ -132,15 +132,15 @@ if (isset($_GET['eventID'])) {
 } elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
     // Main fields from $_POST array
     $userid = $_SESSION['user_id'];
-    $type = $_POST['type'];
+    $type = isset($_POST['type']) ? $_POST['type'] : 0;
     $date = date('Y-m-d', strtotime($_POST['date']));
-    $location = $_POST['location'];
-    $weather = $_POST['weather'];
-    $totalShots = $_POST['totalShots'];
-    $ammo = $_POST['ammo'];
-    $poi = $_POST['poi'];
-    $glasses = $_POST['glasses'];
-    $ears = $_POST['ears'];
+    $location = isset($_POST['location']) ? $_POST['location'] : 0;
+    $weather = isset($_POST['weather']) ? $_POST['weather'] : '';
+    $totalShots = isset($_POST['totalShots']) ? $_POST['totalShots'] : 0;
+    $ammo = isset($_POST['ammo']) ? $_POST['ammo'] : 0;
+    $poi = isset($_POST['poi']) ? $_POST['poi'] : 0;
+    $glasses = isset($_POST['glasses']) ? $_POST['glasses'] : 0;
+    $ears = isset($_POST['ears']) ? $_POST['ears'] : 0;
     // Insert main fields into events table
     $stmt = mysqli_prepare($conn, "INSERT INTO events (type, date, location, weather, ammo, poi, glasses, ears, totalShots, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
     mysqli_stmt_bind_param($stmt, "isisiiiiii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userid);
