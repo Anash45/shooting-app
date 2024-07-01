@@ -22,7 +22,7 @@ if(isUserLoggedIn()){
         </div>
     </head>
 
-    <body class="home-bg py-10 flex flex-col justify-center" style="./assets/images/<?php echo getBgImg(); ?>">
+    <body class="home-bg py-10 flex flex-col justify-center" style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
         <div class="bg-white shadow-md rounded px-4 pt-4 border-b-orange pb-4 mb-4 flex flex-col w-fit mx-auto glass">
             <div class="flex flex-col justify-center items-center">
                 <img src="./assets/images/TheClayground-01.png" alt="Logo" class="h-20 mb-3">

@@ -36,7 +36,7 @@ if (isset($_REQUEST['delete'])) {
         <link href="dist/custom.css?v=6" rel="stylesheet">
     </head>
 
-    <body class="home-bg flex flex-col" style="./assets/images/<?php echo getBgImg(); ?>">
+    <body class="home-bg flex flex-col" style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
         <div class="h-100vh">
             <?php
             include ('./header.php');
