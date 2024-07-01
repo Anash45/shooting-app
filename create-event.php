@@ -225,7 +225,7 @@ if (isset($_GET['eventID'])) {
         </script>
     </head>
 
-    <body class="home-bg pb-10 flex flex-col justify-center">
+    <body class="home-bg pb-10 flex flex-col justify-center" style="./assets/images/<?php echo getBgImg(); ?>">
         <?php
         include ('./header.php');
         ?>

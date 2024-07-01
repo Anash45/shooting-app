@@ -8,7 +8,6 @@ body {
 }
 
 .home-bg {
-    background-image: url('../assets/images/bg-2.jpeg');
     /* Adjust background properties as needed */
     background-size: cover;
     background-attachment: fixed;

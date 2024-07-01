@@ -129,6 +129,31 @@ function getEventTypes()
     return $types;
 }
 
+function getBgImg()
+{
+    global $conn;
+    // SQL query to fetch image_name from backgroundimage table
+    $query = "SELECT image_name FROM backgroundimage ORDER BY id DESC LIMIT 1";
+
+    // Execute the query
+    $result = mysqli_query($conn, $query);
+
+    // Check if query executed successfully
+    if ($result) {
+        // Fetch the image_name from the result set
+        $row = mysqli_fetch_assoc($result);
+
+        // Free result set
+        mysqli_free_result($result);
+
+        // Return the image_name (or null if no result found)
+        return ($row) ? $row['image_name'] : null;
+    } else {
+        // Query execution failed
+        return null;
+    }
+}
+
 $dbTypes = getEventTypes();
 $dbEars = getEars();
 $dbPOIs = getPOI();

@@ -123,7 +123,7 @@ if (isset($_GET['eventID'])) {
         <link href="dist/custom.css?v=6" rel="stylesheet">
     </head>
 
-    <body class="home-bg pb-10 flex flex-col justify-center">
+    <body class="home-bg pb-10 flex flex-col justify-center" style="./assets/images/<?php echo getBgImg(); ?>">
         <?php
         include ('./header.php');
         ?>
