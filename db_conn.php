@@ -38,6 +38,102 @@ function isUserLoggedIn()
         return false;
     }
 }
+
+// Function to get locations
+function getLocations()
+{
+    global $conn;
+    $query = "SELECT * FROM locations";
+    $result = $conn->query($query);
+    $locations = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $locations[] = $row;
+        }
+    }
+    return $locations;
+}
+
+// Function to get ammo options
+function getAmmo()
+{
+    global $conn;
+    $query = "SELECT * FROM ammo";
+    $result = $conn->query($query);
+    $ammo = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $ammo[] = $row;
+        }
+    }
+    return $ammo;
+}
+
+// Function to get POI options
+function getPOI()
+{
+    global $conn;
+    $query = "SELECT * FROM poi";
+    $result = $conn->query($query);
+    $poi = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $poi[] = $row;
+        }
+    }
+    return $poi;
+}
+
+// Function to get glasses options
+function getGlasses()
+{
+    global $conn;
+    $query = "SELECT * FROM glasses";
+    $result = $conn->query($query);
+    $glasses = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $glasses[] = $row;
+        }
+    }
+    return $glasses;
+}
+
+// Function to get ears options
+function getEars()
+{
+    global $conn;
+    $query = "SELECT * FROM ears";
+    $result = $conn->query($query);
+    $ears = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $ears[] = $row;
+        }
+    }
+    return $ears;
+}
+
+// Function to get event types
+function getEventTypes()
+{
+    global $conn;
+    $query = "SELECT * FROM type";
+    $result = $conn->query($query);
+    $types = [];
+    if ($result && $result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+            $types[] = $row;
+        }
+    }
+    return $types;
+}
+
+$dbTypes = getEventTypes();
+$dbEars = getEars();
+$dbPOIs = getPOI();
+$dbGlasses = getGlasses();
+$dbLocations = getLocations();
+$dbAmmos = getAmmo();
 // This file can be included in other PHP files to use the $conn object for database operations
 ?>
-

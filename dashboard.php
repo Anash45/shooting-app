@@ -47,8 +47,18 @@ if (isset($_REQUEST['delete'])) {
                     <div class="events py-10">
                         <?php echo $info; ?>
                         <?php
-                        // Query to fetch event data
-                        $sql = "SELECT eventID, location, date FROM events WHERE user_id = '$userid' ORDER BY createdAt DESC";
+                        // Query to fetch event data with joins
+                        $sql = "SELECT e.eventID, l.location AS location_name, e.date, a.name AS ammo_name, p.name AS poi_name, g.name AS glasses_name, ea.type AS ears_name, t.name AS type_name
+        FROM events e
+        LEFT JOIN locations l ON e.location = l.id
+        LEFT JOIN ammo a ON e.ammo = a.id
+        LEFT JOIN poi p ON e.poi = p.id
+        LEFT JOIN glasses g ON e.glasses = g.id
+        LEFT JOIN ears ea ON e.ears = ea.id
+        LEFT JOIN type t ON e.type = t.id
+        WHERE e.user_id = '$userid'
+        ORDER BY e.createdAt DESC";
+
                         $result = mysqli_query($conn, $sql);
 
                         // Check if there are any results
@@ -57,7 +67,7 @@ if (isset($_REQUEST['delete'])) {
                             while ($row = mysqli_fetch_assoc($result)) {
                                 // Extract data from the current row
                                 $eventID = $row['eventID'];
-                                $location = $row['location'];
+                                $location = $row['location_name'];
                                 $date = $row['date'];
 
                                 // Generate HTML structure for each event
@@ -80,6 +90,7 @@ if (isset($_REQUEST['delete'])) {
                             // No events found
                             echo '<div class="px-3 py-2 mb-4 bg-red-200 border-red-800 border text-red-800 rounded">No events found!</div>';
                         }
+
                         ?>
                     </div>
                 </div>

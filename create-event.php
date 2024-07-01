@@ -37,7 +37,7 @@ if (isset($_GET['eventID'])) {
                 WHERE eventID = ?";
 
             $stmtUpdateEvent = mysqli_prepare($conn, $updateEventQuery);
-            mysqli_stmt_bind_param($stmtUpdateEvent, 'ssssssssisi', $updateType, $updateDate, $updateLocation, $updateWeather, $updateAmmo, $updatePOI, $updateGlasses, $updateEars, $updateTotalShots, $updateTimestamp, $updateEventID);
+            mysqli_stmt_bind_param($stmtUpdateEvent, 'isisiiiiisi', $updateType, $updateDate, $updateLocation, $updateWeather, $updateAmmo, $updatePOI, $updateGlasses, $updateEars, $updateTotalShots, $updateTimestamp, $updateEventID);
             mysqli_stmt_execute($stmtUpdateEvent);
             mysqli_stmt_close($stmtUpdateEvent);
 
@@ -98,7 +98,7 @@ if (isset($_GET['eventID'])) {
             array_push($_SESSION['notifications'], array('error' => "Error updating event: " . $e->getMessage() . ""));
         }
     }
-    
+
     // Fetch event details from the database
     $fetchEventQuery = "SELECT * FROM events WHERE eventID = ?";
     $stmtFetchEvent = mysqli_prepare($conn, $fetchEventQuery);
@@ -143,7 +143,7 @@ if (isset($_GET['eventID'])) {
     $ears = $_POST['ears'];
     // Insert main fields into events table
     $stmt = mysqli_prepare($conn, "INSERT INTO events (type, date, location, weather, ammo, poi, glasses, ears, totalShots, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    mysqli_stmt_bind_param($stmt, "ssssssssii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userid);
+    mysqli_stmt_bind_param($stmt, "isisiiiiii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userid);
     mysqli_stmt_execute($stmt);
 
     // Get the last inserted eventID
@@ -232,7 +232,8 @@ if (isset($_GET['eventID'])) {
         <main class="mt-10">
             <form action="" method="POST" oninput="validateFields()">
                 <div class="tab-content active" id="tab1">
-                    <div class="bg-white shadow-md rounded border-b-orange px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
+                    <div
+                        class="bg-white shadow-md rounded border-b-orange px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
                         <h2 class="text-center text-2xl font-bold mb-4">Create Event</h2>
                         <?php echo $info; ?>
                         <!-- Type (Drop Down) -->
@@ -241,9 +242,11 @@ if (isset($_GET['eventID'])) {
                                     class="text-red-600">*</span></label>
                             <select id="type" name="type" class="form-select2 w-full border p-2">
                                 <option value="">Select Type</option>
-                                <option value="Practice">Practice</option>
-                                <option value="Registered">Registered</option>
-                                <option value="Misc.">Misc.</option>
+                                <?php
+                                foreach ($dbTypes as $dbType) {
+                                    echo '<option value="' . $dbType['id'] . '">' . $dbType['name'] . '</option>';
+                                }
+                                ?>
                             </select>
                             <p class="inp-error">Please select a type.</p>
                         </div>
@@ -260,38 +263,11 @@ if (isset($_GET['eventID'])) {
                                     class="text-red-600">*</span></label>
                             <select id="location" name="location" class="form-select2 w-full border p-2">
                                 <option value="">Select Location</option>
-                                <option
-                                    value="Watervliet Fish and Game Protective Association - 70 Rifle Range Rd, Colonie, NY 12205">
-                                    Watervliet Fish and Game Protective Association - 70 Rifle Range Rd, Colonie, NY
-                                    12205 </option>
-                                <option value="West Albany Rod & Gun Club Inc - 100 Willoughby Dr, Albany, NY 12205">
-                                    West Albany Rod & Gun Club Inc - 100 Willoughby Dr, Albany, NY 12205</option>
-                                <option value="Voorheesville Rod & Gun Club - 52 Foundry Rd, Voorheesville, NY 12186">
-                                    Voorheesville Rod & Gun Club - 52 Foundry Rd, Voorheesville, NY 12186</option>
-                                <option value="A R Sportsman's Club. - 79 UDELL RD Reidsville, NY 12193">A R Sportsman's
-                                    Club. - 79 UDELL RD Reidsville, NY 12193</option>
-                                <option value="Iroquois Rod & Gun Club - 590 Feuz Rd, Schenectady, NY 12306">Iroquois
-                                    Rod & Gun Club - 590 Feuz Rd, Schenectady, NY 12306</option>
-                                <option value="Guan Ho Ha Fish and Game Club - 1451 Rector Rd, Scotia, NY 12302">Guan Ho
-                                    Ha Fish and Game Club - 1451 Rector Rd, Scotia, NY 12302</option>
-                                <option value="Elsmere Rod & Gun Club - 3131 Delaware TurnpikeVoorheesville, NY 12186">
-                                    Elsmere Rod & Gun Club - 3131 Delaware TurnpikeVoorheesville, NY 12186</option>
-                                <option value="NYS ATA Shooting Grounds - 7400 Bullt Street, Bridgeport NY 13030">NYS
-                                    ATA Shooting Grounds - 7400 Bullt Street, Bridgeport NY 13030</option>
-                                <option
-                                    value="Pennsylvania State Shotgunning Association - 405 Monastery Rd, Elysburg, PA 17824">
-                                    Pennsylvania State Shotgunning Association - 405 Monastery Rd, Elysburg, PA 17824
-                                </option>
-                                <option
-                                    value="Sportsman Club Of Clifton Park - 644 Englemore Rd, Clifton Park, NY 12065">
-                                    Sportsman Club Of Clifton Park - 644 Englemore Rd, Clifton Park, NY 12065</option>
-                                <option value="Pine Belt Sportsman's Club - 377 Stokes Rd, Shamong, NJ 08088">Pine Belt
-                                    Sportsman's Club - 377 Stokes Rd, Shamong, NJ 08088</option>
-                                <option value="Hartford Gun Club - 157 S Main St, East Granby, CT 06026">Hartford Gun
-                                    Club - 157 S Main St, East Granby, CT 06026</option>
-                                <option
-                                    value="World Shooting and Recreational Complex - 1 Main Event Ln, Sparta, IL 62286">
-                                    World Shooting and Recreational Complex - 1 Main Event Ln, Sparta, IL 62286</option>
+                                <?php
+                                foreach ($dbLocations as $dbLocation) {
+                                    echo '<option value="' . $dbLocation['id'] . '">' . $dbLocation['location'] . '</option>';
+                                }
+                                ?>
                             </select>
                             <p class="inp-error">Please select a location.</p>
                         </div>
@@ -306,34 +282,11 @@ if (isset($_GET['eventID'])) {
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="ammo">Ammo </label>
                             <select id="ammo" name="ammo" class="form-select2 w-full border p-2">
                                 <option value="">Select Ammo</option>
-                                <option value="Federal Top Gun 1145fps 1 1/8 oz. Size 8">Federal Top Gun 1145fps 1 1/8
-                                    oz. Size 8</option>
-                                <option value="Federal Top Gun 1145fps 1 1/8 oz. Size 7.5">Federal Top Gun 1145fps 1 1/8
-                                    oz. Size 7.5</option>
-                                <option value="Federal Top Gun 1200ps 1 1/8 oz. Size 8">Federal Top Gun 1200ps 1 1/8 oz.
-                                    Size 8</option>
-                                <option value="Federal Top Gun 1200fps 1 1/8 oz. Size 7.5">Federal Top Gun 1200fps 1 1/8
-                                    oz. Size 7.5</option>
-                                <option value="Winchester AA 1200fps 1 1/8 oz. Size 8">Winchester AA 1200fps 1 1/8 oz.
-                                    Size 8</option>
-                                <option value="Winchester AA 1200fps 1 1/8 oz. Size 7.5">Winchester AA 1200fps 1 1/8 oz.
-                                    Size 7.5</option>
-                                <option value="Federal HOA 1200fps 1 1/8 oz. Size 7.5">Federal HOA 1200fps 1 1/8 oz.
-                                    Size 7.5</option>
-                                <option value="Estate 1200fps 1 1/8 oz. Size 7.5">Estate 1200fps 1 1/8 oz. Size 7.5
-                                </option>
-                                <option value="Remington Gun Club 1145fps 1 1/8 oz. Size 8">Remington Gun Club 1145fps 1
-                                    1/8 oz. Size 8</option>
-                                <option value="Remington Gun Club 1145fps 1 1/8 oz. Size 7.5">Remington Gun Club 1145fps
-                                    1 1/8 oz. Size 7.5</option>
-                                <option value="Fiochi Shooting Dynamics 1200fps 1 1/8 oz. Size 8">Fiochi Shooting
-                                    Dynamics 1200fps 1 1/8 oz. Size 8</option>
-                                <option value="Fiochi Shooting Dynamics 1200fps 1 1/8 oz. Size 7.5">Fiochi Shooting
-                                    Dynamics 1200fps 1 1/8 oz. Size 7.5</option>
-                                <option value="Fiochi Shooting Dynamics 1145fps 1 1/8 oz. Size 8">Fiochi Shooting
-                                    Dynamics 1145fps 1 1/8 oz. Size 8</option>
-                                <option value="Fiochi Shooting Dynamics 1145fps 1 1/8 oz. Size 7.5">Fiochi Shooting
-                                    Dynamics 1145fps 1 1/8 oz. Size 7.5</option>
+                                <?php
+                                foreach ($dbAmmos as $dbAmmo) {
+                                    echo '<option value="' . $dbAmmo['id'] . '">' . $dbAmmo['name'] . '</option>';
+                                }
+                                ?>
                             </select>
                             <p class="inp-error">Please select an ammo type.</p>
                         </div>
@@ -342,13 +295,11 @@ if (isset($_GET['eventID'])) {
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="poi">POI </label>
                             <select id="poi" name="poi" class="form-select2 w-full border p-2">
                                 <option value="">Select POI</option>
-                                <option value="50/50">50/50</option>
-                                <option value="60/40">60/40</option>
-                                <option value="70/30">70/30</option>
-                                <option value="80/20">80/20</option>
-                                <option value="90/10">90/10</option>
-                                <option value="110/110">110/110</option>
-                                <option value="120/120">120/120</option>
+                                <?php
+                                foreach ($dbPOIs as $dbPOI) {
+                                    echo '<option value="' . $dbPOI['id'] . '">' . $dbPOI['name'] . '</option>';
+                                }
+                                ?>
                             </select>
                             <p class="inp-error">Please select a POI.</p>
                         </div>
@@ -357,10 +308,11 @@ if (isset($_GET['eventID'])) {
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="glasses">Glasses </label>
                             <select id="glasses" name="glasses" class="form-select2 w-full border p-2">
                                 <option value="">Select Glasses</option>
-                                <option value="Ranger">Ranger</option>
-                                <option value="Pilla 53CIK">Pilla 53CIK</option>
-                                <option value="Pilla 78CIHC">Pilla 78CIHC</option>
-                                <option value="Pilla15CIHC">Pilla15CIHC</option>
+                                <?php
+                                foreach ($dbGlasses as $dbGlasse) {
+                                    echo '<option value="' . $dbGlasse['id'] . '">' . $dbGlasse['name'] . '</option>';
+                                }
+                                ?>
                             </select>
                             <p class="inp-error">Please select glasses.</p>
                         </div>
@@ -369,11 +321,11 @@ if (isset($_GET['eventID'])) {
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="ears">Ears </label>
                             <select id="ears" name="ears" class="form-select2 w-full border p-2">
                                 <option value="">Select Ear Protection</option>
-                                <option value="Standard">Standard</option>
-                                <option value="Passive">Passive</option>
-                                <option value="Foam">Foam</option>
-                                <option value="Music">Music</option>
-                                <option value="Foam/Music">Foam/Music</option>
+                                <?php
+                                foreach ($dbEars as $dbEar) {
+                                    echo '<option value="' . $dbEar['id'] . '">' . $dbEar['type'] . '</option>';
+                                }
+                                ?>
                             </select>
                             <p class="inp-error">Please select ear protection.</p>
                         </div>
@@ -386,7 +338,8 @@ if (isset($_GET['eventID'])) {
                     </div>
                 </div>
                 <div class="tab-content" id="tab2">
-                    <div class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 border-b-orange mb-4 max-w-lg glass w-full mx-auto">
+                    <div
+                        class="bg-white shadow-md rounded-lg px-8 pt-6 pb-8 border-b-orange mb-4 max-w-lg glass w-full mx-auto">
                         <h2 class="text-center text-2xl font-bold mb-4">Rounds</h2>
                         <fieldset class="py-4">
                             <div class="relative">

@@ -128,7 +128,8 @@ if (isset($_GET['eventID'])) {
         include ('./header.php');
         ?>
         <main class="mt-10">
-            <div class="bg-white border-b-orange shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
+            <div
+                class="bg-white border-b-orange shadow-md rounded-lg px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
                 <h2 class="text-center text-2xl font-bold mb-4">Event Details</h2>
                 <?php echo $info; ?>
                 <?php
@@ -136,8 +137,16 @@ if (isset($_GET['eventID'])) {
                 if (isset($_GET['eventID'])) {
                     $eventID = $_GET['eventID'];
 
-                    // Query to fetch event details
-                    $eventQuery = "SELECT * FROM events WHERE eventID = $eventID";
+                    $eventQuery = "SELECT e.eventID, t.name AS type, e.date, l.location AS location, e.weather, a.name AS ammo, p.name AS poi, g.name AS glasses, ea.type AS ears, e.totalShots
+                FROM events e
+                LEFT JOIN locations l ON e.location = l.id
+                LEFT JOIN ammo a ON e.ammo = a.id
+                LEFT JOIN poi p ON e.poi = p.id
+                LEFT JOIN glasses g ON e.glasses = g.id
+                LEFT JOIN ears ea ON e.ears = ea.id
+                LEFT JOIN type t ON e.type = t.id
+                WHERE e.eventID = $eventID";
+
                     $eventResult = mysqli_query($conn, $eventQuery);
 
                     // Check if event exists
@@ -203,7 +212,8 @@ if (isset($_GET['eventID'])) {
             </div>
             <div class="container mx-auto">
                 <div class="pt-10">
-                    <h2 class="text-3xl text-center font-bold mb-4 text-black p-3 glass rounded-lg border-b-orange">Notes</h2>
+                    <h2 class="text-3xl text-center font-bold mb-4 text-black p-3 glass rounded-lg border-b-orange">
+                        Notes</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                         <?php if (!empty($notes)): ?>
                             <?php foreach ($notes as $note): ?>
