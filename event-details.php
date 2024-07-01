@@ -192,7 +192,7 @@ if (isset($_GET['eventID'])) {
                                     $totalRounds = 50;
                                 }
                                 echo '<tr>';
-                                echo '<th>' . ucwords($roundType) . ': </th>' . '<td>' . implode(', ', $roundValues) . '</td>';
+                                echo '<th colspan="2" class="text-center">' . ucwords($roundType) . ': </th>';
                                 echo '</tr>';
                                 echo '<tr>';
                                 echo '<th>Total Shot at: </th>' . '<td>' . $totalRounds * count($roundValues) . '</td>';
