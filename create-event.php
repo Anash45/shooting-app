@@ -132,17 +132,19 @@ if (isset($_GET['eventID'])) {
 } elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
     // Main fields from $_POST array
     $userid = $_SESSION['user_id'];
-    $type = isset($_POST['type']) ? $_POST['type'] : 0;
+    $type = $_POST['type'];
     $date = date('Y-m-d', strtotime($_POST['date']));
-    $location = isset($_POST['location']) ? $_POST['location'] : 0;
-    $weather = isset($_POST['weather']) ? $_POST['weather'] : '';
-    $totalShots = isset($_POST['totalShots']) ? $_POST['totalShots'] : 0;
-    $ammo = isset($_POST['ammo']) ? $_POST['ammo'] : 0;
-    $poi = isset($_POST['poi']) ? $_POST['poi'] : 0;
-    $glasses = isset($_POST['glasses']) ? $_POST['glasses'] : 0;
-    $ears = isset($_POST['ears']) ? $_POST['ears'] : 0;
-    // Insert main fields into events table
+    $location = $_POST['location'];
+    $weather = !empty($_POST['weather']) ? $_POST['weather'] : NULL;
+    $totalShots = !empty($_POST['totalShots']) ? $_POST['totalShots'] : NULL;
+    $ammo = !empty($_POST['ammo']) ? $_POST['ammo'] : NULL;
+    $poi = !empty($_POST['poi']) ? $_POST['poi'] : NULL;
+    $glasses = !empty($_POST['glasses']) ? $_POST['glasses'] : NULL;
+    $ears = !empty($_POST['ears']) ? $_POST['ears'] : NULL;
+
+    // Prepare the SQL statement with placeholders
     $stmt = mysqli_prepare($conn, "INSERT INTO events (type, date, location, weather, ammo, poi, glasses, ears, totalShots, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+    // Bind the parameters
     mysqli_stmt_bind_param($stmt, "isisiiiiii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userid);
     mysqli_stmt_execute($stmt);
 

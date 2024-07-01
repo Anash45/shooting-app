@@ -162,6 +162,10 @@ if (isset($_GET['eventID'])) {
                                 if ($field == "totalShots") {
                                     $field = '<span style="white-space:nowrap;">Total Shot</span>';
                                 }
+
+                                if(($field == 'weather' && $value == '') || ($field == 'ammo' && $value == NULL) || ($field == 'poi' && $value == NULL) || ($field == 'glasses' && $value == NULL) || ($field == 'ears' && $value == NULL)){
+                                    continue;
+                                }
                                 echo '<tr>';
                                 echo '<th class="p-2 text-left">' . ucwords(str_replace("_", " ", $field)) . '</th>';
                                 echo '<td class="p-2">' . $value . '</td>';
