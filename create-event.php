@@ -13,14 +13,14 @@ if (isset($_GET['eventID'])) {
         // print_r($_POST);
         // Retrieve and sanitize form data
         $updateEventID = $currentEventID; // This is safe because it's explicitly set
-        $updateType = mysqli_real_escape_string($conn, $_POST['type']);
+        $updateType = !empty($_POST['type']) ? $_POST['type'] : NULL;
         $updateDate = date('Y-m-d', strtotime($_POST['date']));
-        $updateLocation = mysqli_real_escape_string($conn, $_POST['location']);
-        $updateWeather = mysqli_real_escape_string($conn, $_POST['weather']);
-        $updateAmmo = mysqli_real_escape_string($conn, $_POST['ammo']);
-        $updatePOI = mysqli_real_escape_string($conn, $_POST['poi']);
-        $updateGlasses = mysqli_real_escape_string($conn, $_POST['glasses']);
-        $updateEars = mysqli_real_escape_string($conn, $_POST['ears']);
+        $updateLocation = !empty($_POST['location']) ? $_POST['location'] : NULL;
+        $updateWeather = !empty($_POST['weather']) ? $_POST['weather'] : NULL;
+        $updateAmmo = !empty($_POST['ammo']) ? $_POST['ammo'] : NULL;
+        $updatePOI = !empty($_POST['poi']) ? $_POST['poi'] : NULL;
+        $updateGlasses = !empty($_POST['glasses']) ? $_POST['glasses'] : NULL;
+        $updateEars = !empty($_POST['ears']) ? $_POST['ears'] : NULL;
         $updateTotalShots = intval($_POST['totalShots']);
 
         // Get the current timestamp for createdAt and updatedAt
@@ -136,54 +136,61 @@ if (isset($_GET['eventID'])) {
     $date = date('Y-m-d', strtotime($_POST['date']));
     $location = $_POST['location'];
     $weather = !empty($_POST['weather']) ? $_POST['weather'] : NULL;
-    $totalShots = !empty($_POST['totalShots']) ? $_POST['totalShots'] : NULL;
+    $totalShots = intval($_POST['totalShots']);
     $ammo = !empty($_POST['ammo']) ? $_POST['ammo'] : NULL;
     $poi = !empty($_POST['poi']) ? $_POST['poi'] : NULL;
     $glasses = !empty($_POST['glasses']) ? $_POST['glasses'] : NULL;
     $ears = !empty($_POST['ears']) ? $_POST['ears'] : NULL;
 
-    // Prepare the SQL statement with placeholders
-    $stmt = mysqli_prepare($conn, "INSERT INTO events (type, date, location, weather, ammo, poi, glasses, ears, totalShots, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-    // Bind the parameters
-    mysqli_stmt_bind_param($stmt, "isisiiiiii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userid);
-    mysqli_stmt_execute($stmt);
+    try {
 
-    // Get the last inserted eventID
-    $eventID = mysqli_insert_id($conn);
-
-    // Singles, handicaps, and doubles from $_POST array
-    $singles = $_POST['singles'];
-    $handicaps = $_POST['handicaps'];
-    $doubles = $_POST['doubles'];
-
-    // Insert singles into rounds table
-    foreach ($singles as $shots) {
-        $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Singles', ?)");
-        mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
+        // Prepare the SQL statement with placeholders
+        $stmt = mysqli_prepare($conn, "INSERT INTO events (type, date, location, weather, ammo, poi, glasses, ears, totalShots, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+        // Bind the parameters
+        mysqli_stmt_bind_param($stmt, "isisiiiiii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userid);
         mysqli_stmt_execute($stmt);
-    }
 
-    // Insert handicaps into rounds table
-    foreach ($handicaps as $shots) {
-        $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Handicap', ?)");
-        mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
-        mysqli_stmt_execute($stmt);
-    }
+        // Get the last inserted eventID
+        $eventID = mysqli_insert_id($conn);
 
-    // Insert doubles into rounds table
-    foreach ($doubles as $shots) {
-        $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Doubles', ?)");
-        mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
-        mysqli_stmt_execute($stmt);
-    }
+        // Singles, handicaps, and doubles from $_POST array
+        $singles = $_POST['singles'];
+        $handicaps = $_POST['handicaps'];
+        $doubles = $_POST['doubles'];
 
-    if (!isset($_SESSION['notifications'])) {
-        $_SESSION['notifications'] = array();
-    }
+        // Insert singles into rounds table
+        foreach ($singles as $shots) {
+            $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Singles', ?)");
+            mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
+            mysqli_stmt_execute($stmt);
+        }
 
-    // Push a notification into $_SESSION['notifications']
-    array_push($_SESSION['notifications'], array('success' => 'Event created successfully'));
-    header('location:dashboard.php?event=success');
+        // Insert handicaps into rounds table
+        foreach ($handicaps as $shots) {
+            $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Handicap', ?)");
+            mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
+            mysqli_stmt_execute($stmt);
+        }
+
+        // Insert doubles into rounds table
+        foreach ($doubles as $shots) {
+            $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Doubles', ?)");
+            mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
+            mysqli_stmt_execute($stmt);
+        }
+
+        if (!isset($_SESSION['notifications'])) {
+            $_SESSION['notifications'] = array();
+        }
+
+        // Push a notification into $_SESSION['notifications']
+        array_push($_SESSION['notifications'], array('success' => 'Event created successfully'));
+        header('location:dashboard.php?event=success');
+    } catch (Exception $e) {
+        // Rollback transaction on error
+        mysqli_rollback($conn);
+        array_push($_SESSION['notifications'], array('error' => "Error creating event: " . $e->getMessage() . ""));
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -227,7 +234,8 @@ if (isset($_GET['eventID'])) {
         </script>
     </head>
 
-    <body class="home-bg pb-10 flex flex-col justify-center" style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
+    <body class="home-bg pb-10 flex flex-col justify-center"
+        style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
         <?php
         include ('./header.php');
         ?>
