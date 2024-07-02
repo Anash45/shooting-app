@@ -71,7 +71,7 @@ if (isset($_REQUEST['delete'])) {
                                 $date = $row['date'];
 
                                 // Generate HTML structure for each event
-                                echo '<div class="bg-white event shadow-md rounded-md p-3 mb-4 event border-b-orange">';
+                                echo '<div class="bg-white event shadow-md rounded-md aa p-3 mb-4 event border-b-orange">';
                                 echo '<div class="flex justify-between gap-3 mb-2">';
                                 echo '<h4 class="font-bold sm:text-lg text-md text-orange">' . $location . '</h4>';
                                 echo '<div>';
