@@ -73,7 +73,7 @@ if (isset($_REQUEST['delete'])) {
                                 // Generate HTML structure for each event
                                 echo '<div class="bg-white event shadow-md rounded-md p-3 mb-4 event border-b-orange">';
                                 echo '<div class="flex justify-between gap-3 mb-2">';
-                                echo '<h4 class="font-bold sm:text-2xl text-lg text-orange">' . $location . '</h4>';
+                                echo '<h4 class="font-bold sm:text-xl text-lg text-orange">' . $location . '</h4>';
                                 echo '<div>';
                                 echo '<div class="flex items-center gap-1"><a href="create-event.php?eventID=' . $eventID . '" class="px-2 text-xs py-1 rounded bg-blue-700 hover:bg-blue-800 text-white"><i class="fa fa-edit"></i></a> <a onclick="return confirm(\'Do you really want to delete this event?\');" href="?delete=' . $eventID . '" class="px-2 text-xs py-1 rounded bg-red-700 hover:bg-red-800 text-white"><i class="fa fa-trash"></i></a></div>';
                                 echo '</div>';

@@ -199,13 +199,16 @@ if (isset($_GET['eventID'])) {
                                 echo '<th colspan="2" class="text-center">' . ucwords($roundType) . '</th>';
                                 echo '</tr>';
                                 echo '<tr>';
+                                echo '<th>Scores: </th><td>'.implode(',', $roundValues ).'</td>';
+                                echo '</tr>';
+                                echo '<tr>';
                                 echo '<th>Total Shot at: </th>' . '<td>' . $totalRounds * count($roundValues) . '</td>';
                                 echo '</tr>';
                                 echo '<tr>';
                                 echo '<th>Total Hit: </th>' . '<td>' . array_sum($roundValues) . '</td>';
                                 echo '</tr>';
                                 echo '<tr class="last-tr">';
-                                echo '<th>Hit Percentage: </th>' . '<td>' . number_format(array_sum($roundValues) / ($totalRounds * count($roundValues)) * 100, 2, '.') . '%</td>';
+                                echo '<th>Percentage: </th>' . '<td>' . number_format(array_sum($roundValues) / ($totalRounds * count($roundValues)) * 100, 2, '.') . '%</td>';
                                 echo '</tr>';
                             }
                             echo '</table>';
