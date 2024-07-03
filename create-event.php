@@ -187,6 +187,7 @@ if (isset($_GET['eventID'])) {
 
         // Push a notification into $_SESSION['notifications']
         array_push($_SESSION['notifications'], array('success' => 'Event created successfully'));
+        header('location:dashboard.php');
     } catch (Exception $e) {
         // Rollback transaction on error
         mysqli_rollback($conn);
