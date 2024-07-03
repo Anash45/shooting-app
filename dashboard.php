@@ -33,7 +33,7 @@ if (isset($_REQUEST['delete'])) {
             integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css?v=6" rel="stylesheet">
+        <link href="dist/custom.css?v=7" rel="stylesheet">
     </head>
 
     <body class="home-bg flex flex-col" style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
@@ -97,7 +97,7 @@ if (isset($_REQUEST['delete'])) {
             </main>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <script src="assets/js/script.js?v=6"></script>
+        <script src="assets/js/script.js?v=7"></script>
     </body>
 
 </html>

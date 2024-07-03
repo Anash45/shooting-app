@@ -16,7 +16,8 @@
     <!-- Popup container -->
     <div id="popup" class="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg mx-4">
         <h2 class="text-xl font-bold mb-4 text-center">Add Note</h2>
-        <form method="post" action="?eventID=<?php echo $eventID; ?>" id="popup-form" enctype="multipart/form-data">
+        <form method="post" action="<?php echo $pageParam = (isset($_GET['eventID'])) ? '?eventID=' . $_GET['eventID'] : ''; ?>"
+            id="popup-form" enctype="multipart/form-data">
             <div class="mb-4">
                 <label for="title" class="block text-gray-700">Title</label>
                 <input type="text" id="title" name="title" class="w-full px-3 py-2 border rounded">
@@ -27,16 +28,16 @@
                     rows="4"></textarea>
             </div>
             <div class="mb-4">
-                <label for="file-upload" class="block text-gray-700">Upload PDF</label>
+                <label for="file-upload" class="block text-gray-700">Upload File</label>
                 <input type="file" id="file-upload" name="file-upload" accept=".pdf,.png,.jpg,.jpeg,.gif,.svg"
                     class="w-full px-3 py-2 border rounded">
-                <p class="text-xs text-gray-600">Only PDF files are allowed.</p>
+                <p class="text-xs text-gray-600">Only .pdf, .png, .jpg, .jpeg, .gif, .svg files are allowed.</p>
             </div>
             <div class="flex justify-end">
                 <button type="button" id="close-popup"
                     class="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 mr-2">Cancel</button>
-                <button type="submit"
-                    class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">Submit</button>
+                <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+                    name="add_note">Submit</button>
             </div>
         </form>
     </div>

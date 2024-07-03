@@ -12,8 +12,8 @@ if(isUserLoggedIn()){
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Clay Shooting</title>
-        <link href="dist/styles.css?v=6" rel="stylesheet">
-        <link href="dist/custom.css?v=6" rel="stylesheet">
+        <link href="dist/styles.css?v=7" rel="stylesheet">
+        <link href="dist/custom.css?v=7" rel="stylesheet">
         <script src="https://accounts.google.com/gsi/client" async defer></script>
         <!-- 816473627869-i3cqai8sstv6e0ppiq5cbq86k4rbp06l -->
          <!-- 816473627869-0v2j3calunt3mged7uvi5pk2p8b3e113 -->
@@ -33,7 +33,7 @@ if(isUserLoggedIn()){
             </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
-        <script src="assets/js/script.js?v=6"></script>
+        <script src="assets/js/script.js?v=7"></script>
         <script>
             // Function to handle the credential response
             function handleCredentialResponse(response) {

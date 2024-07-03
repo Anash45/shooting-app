@@ -4,12 +4,13 @@ if (!isUserLoggedIn()) {
     header('location:index.php');
     exit;
 }
+$userID = $_SESSION['user_id'];
 // Check if eventID is set in the URL
 if (isset($_GET['eventID'])) {
     $currentEventID = intval($_GET['eventID']);
 
     // If the form is submitted
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['update_event'])) {
         // print_r($_POST);
         // Retrieve and sanitize form data
         $updateEventID = $currentEventID; // This is safe because it's explicitly set
@@ -129,9 +130,9 @@ if (isset($_GET['eventID'])) {
         }
     }
     mysqli_stmt_close($stmtFetchRounds);
-} elseif ($_SERVER['REQUEST_METHOD'] == "POST") {
+} elseif ($_SERVER['REQUEST_METHOD'] == "POST" && isset($_POST['add_event'])) {
     // Main fields from $_POST array
-    $userid = $_SESSION['user_id'];
+    $userID = $_SESSION['user_id'];
     $type = $_POST['type'];
     $date = date('Y-m-d', strtotime($_POST['date']));
     $location = $_POST['location'];
@@ -147,11 +148,11 @@ if (isset($_GET['eventID'])) {
         // Prepare the SQL statement with placeholders
         $stmt = mysqli_prepare($conn, "INSERT INTO events (type, date, location, weather, ammo, poi, glasses, ears, totalShots, user_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
         // Bind the parameters
-        mysqli_stmt_bind_param($stmt, "isisiiiiii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userid);
+        mysqli_stmt_bind_param($stmt, "isisiiiiii", $type, $date, $location, $weather, $ammo, $poi, $glasses, $ears, $totalShots, $userID);
         mysqli_stmt_execute($stmt);
 
         // Get the last inserted eventID
-        $eventID = mysqli_insert_id($conn);
+        $currentEventID = mysqli_insert_id($conn);
 
         // Singles, handicaps, and doubles from $_POST array
         $singles = $_POST['singles'];
@@ -161,21 +162,21 @@ if (isset($_GET['eventID'])) {
         // Insert singles into rounds table
         foreach ($singles as $shots) {
             $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Singles', ?)");
-            mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
+            mysqli_stmt_bind_param($stmt, "is", $currentEventID, $shots);
             mysqli_stmt_execute($stmt);
         }
 
         // Insert handicaps into rounds table
         foreach ($handicaps as $shots) {
             $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Handicap', ?)");
-            mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
+            mysqli_stmt_bind_param($stmt, "is", $currentEventID, $shots);
             mysqli_stmt_execute($stmt);
         }
 
         // Insert doubles into rounds table
         foreach ($doubles as $shots) {
             $stmt = mysqli_prepare($conn, "INSERT INTO rounds (eventID, round_type, rounds) VALUES (?, 'Doubles', ?)");
-            mysqli_stmt_bind_param($stmt, "is", $eventID, $shots);
+            mysqli_stmt_bind_param($stmt, "is", $currentEventID, $shots);
             mysqli_stmt_execute($stmt);
         }
 
@@ -190,6 +191,96 @@ if (isset($_GET['eventID'])) {
         // Rollback transaction on error
         mysqli_rollback($conn);
         array_push($_SESSION['notifications'], array('error' => "Error creating event: " . $e->getMessage() . ""));
+    }
+}
+// print_r($_POST);
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_note'])) {
+
+    // echo 1;
+    if (isset($currentEventID)) {
+        // Get other form data
+        $title = mysqli_real_escape_string($conn, $_POST['title']);
+        $description = mysqli_real_escape_string($conn, $_POST['description']);
+
+        // Initialize file handling variables
+        $fileUploaded = false;
+        $newFileName = '';
+
+        // Check if a file is uploaded
+        if (!empty($_FILES['file-upload']['name'])) {
+            // File upload handling
+            $uploadDir = 'uploads/';
+            $file = $_FILES['file-upload'];
+            $fileName = basename($file['name']);
+            $fileTmpPath = $file['tmp_name'];
+            $fileSize = $file['size'];
+            $fileExt = strtolower(pathinfo($fileName, PATHINFO_EXTENSION));
+
+            $allowedExtensions = ['pdf', 'png', 'jpg', 'jpeg', 'svg', 'gif'];
+            $errors = [];
+
+            // Validate file extension
+            if (!in_array($fileExt, $allowedExtensions)) {
+                $errors[] = 'Invalid file type. Only PDF, PNG, JPG, JPEG, SVG, and GIF files are allowed.';
+            }
+            // Validate file size (5 MB max)
+            if ($fileSize > 5 * 1024 * 1024) { // 5 MB
+                $errors[] = 'File size should not exceed 5 MB.';
+            }
+
+            // If no errors, proceed with the file upload
+            if (empty($errors)) {
+                // Generate a unique file name to avoid overwriting
+                $newFileName = uniqid('file_', true) . '.' . $fileExt;
+                $destPath = $uploadDir . $newFileName;
+
+                // Move the file to the desired directory
+                if (move_uploaded_file($fileTmpPath, $destPath)) {
+                    $fileUploaded = true;
+                } else {
+                    $errors[] = 'Error uploading file.';
+                }
+            }
+        }
+
+        // Check for errors before proceeding
+        if (empty($errors)) {
+            // Prepare the query based on whether a file was uploaded
+            $createdAt = date('Y-m-d H:i:s');
+            if ($fileUploaded) {
+                $query = "INSERT INTO notes (userID, eventID, title, description, file, created_at, updated_at)
+                      VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $stmt = mysqli_prepare($conn, $query);
+                mysqli_stmt_bind_param($stmt, 'iisssss', $userID, $currentEventID, $title, $description, $newFileName, $createdAt, $createdAt);
+            } else {
+                $query = "INSERT INTO notes (userID, eventID, title, description, created_at, updated_at)
+                      VALUES (?, ?, ?, ?, ?, ?)";
+                $stmt = mysqli_prepare($conn, $query);
+                mysqli_stmt_bind_param($stmt, 'iissss', $userID, $currentEventID, $title, $description, $createdAt, $createdAt);
+            }
+
+            // Execute the query
+            if (mysqli_stmt_execute($stmt)) {
+                if(isset($_GET['eventID'])){
+                    array_push($_SESSION['notifications'], array('success' => 'Event updated & note added successfully'));
+                }else{
+                    array_push($_SESSION['notifications'], array('success' => 'Event created & note added successfully'));
+                }
+                header('location:event-details.php?eventID=' . $currentEventID);
+                exit;
+            } else {
+                $info = "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error: " . mysqli_error($conn) . "</div>";
+            }
+
+            mysqli_stmt_close($stmt);
+        } else {
+            // Display errors
+            foreach ($errors as $error) {
+                array_push($_SESSION['notifications'], array('error' => $error));
+            }
+        }
+    }else{
+        $info = "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>A note cannot be added without adding an event.</div>";
     }
 }
 ?>
@@ -244,7 +335,7 @@ if (isset($_GET['eventID'])) {
                 <div class="tab-content active" id="tab1">
                     <div
                         class="bg-white shadow-md rounded border-b-orange px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
-                        <h2 class="text-center text-2xl font-bold mb-4">Create Event</h2>
+                        <h2 class="text-center text-2xl font-bold mb-4"><?php echo $pageTitle = isset($_GET['eventID']) ? 'Update Event' : 'Create Event'; ?></h2>
                         <?php echo $info; ?>
                         <!-- Type (Drop Down) -->
                         <div class="mb-4">
@@ -401,12 +492,15 @@ if (isset($_GET['eventID'])) {
                                 type="button" data-target="tab1"><i class="fa fa-arrow-left"></i> Back</button>
                             <button
                                 class="btn-create text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                type="submit" id="submitBtn">Submit <i class="fa fa-arrow-right"></i></button>
+                                type="submit" id="submitBtn" name="<?php echo $btnName = isset($_GET['eventID']) ? 'update_event' : 'add_event'; ?>">Submit <i class="fa fa-arrow-right"></i></button>
                         </div>
                     </div>
                 </div>
             </form>
         </main>
+        <?php
+        include './footer.php';
+        ?>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"

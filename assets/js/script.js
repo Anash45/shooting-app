@@ -76,9 +76,10 @@ document.addEventListener('DOMContentLoaded', function () {
     readMoreElements.forEach(element => {
         element.addEventListener('click', function () {
             const parentParagraph = this.parentElement;
-            const fullText = parentParagraph.getAttribute('data-full-text');
-            // parentParagraph.innerHTML = ;
-            alert(fullText);
+            const hiddenSpan = parentParagraph.querySelector('.hidden');
+            const fullText = hiddenSpan.innerHTML;
+            const formattedText = fullText.replace(/<br>/g, '\n'); // Replace \r\n with \n
+            alert(formattedText.trim());
         });
     });
 });

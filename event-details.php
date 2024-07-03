@@ -79,7 +79,7 @@ if (isset($_GET['eventID'])) {
                 header('location:event-details.php?eventID=' . $eventID);
                 exit;
             } else {
-                echo "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error: " . mysqli_error($conn) . "</div>";
+                $info = "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error: " . mysqli_error($conn) . "</div>";
             }
 
             mysqli_stmt_close($stmt);
@@ -120,10 +120,11 @@ if (isset($_GET['eventID'])) {
             crossorigin="anonymous" referrerpolicy="no-referrer" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
         <link href="dist/styles.css" rel="stylesheet">
-        <link href="dist/custom.css?v=6" rel="stylesheet">
+        <link href="dist/custom.css?v=7" rel="stylesheet">
     </head>
 
-    <body class="home-bg pb-10 flex flex-col justify-center" style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
+    <body class="home-bg pb-10 flex flex-col justify-center"
+        style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
         <?php
         include ('./header.php');
         ?>
@@ -163,7 +164,7 @@ if (isset($_GET['eventID'])) {
                                     $field = '<span style="white-space:nowrap;">Total Shot</span>';
                                 }
 
-                                if(($field == 'weather' && $value == '') || ($field == 'ammo' && $value == NULL) || ($field == 'poi' && $value == NULL) || ($field == 'glasses' && $value == NULL) || ($field == 'ears' && $value == NULL)){
+                                if (($field == 'weather' && $value == '') || ($field == 'ammo' && $value == NULL) || ($field == 'poi' && $value == NULL) || ($field == 'glasses' && $value == NULL) || ($field == 'ears' && $value == NULL)) {
                                     continue;
                                 }
                                 echo '<tr>';
@@ -190,7 +191,7 @@ if (isset($_GET['eventID'])) {
                             foreach ($rounds as $roundType => $roundValues) {
                                 if (strtolower($roundType) == 'singles') {
                                     $totalRounds = 25;
-                                } elseif (strtolower($roundType) == 'handicaps') {
+                                } elseif (strtolower($roundType) == 'handicap') {
                                     $totalRounds = 25;
                                 } elseif (strtolower($roundType) == 'doubles') {
                                     $totalRounds = 50;
@@ -199,7 +200,7 @@ if (isset($_GET['eventID'])) {
                                 echo '<th colspan="2" class="text-center">' . ucwords($roundType) . '</th>';
                                 echo '</tr>';
                                 echo '<tr>';
-                                echo '<th>Scores: </th><td>'.implode(',', $roundValues ).'</td>';
+                                echo '<th>Scores: </th><td>' . implode(',', $roundValues) . '</td>';
                                 echo '</tr>';
                                 echo '<tr>';
                                 echo '<th>Total Shot at: </th>' . '<td>' . $totalRounds * count($roundValues) . '</td>';
@@ -230,9 +231,16 @@ if (isset($_GET['eventID'])) {
                                     <div>
                                         <h3 class="text-lg font-semibold mb-2"><?php echo htmlspecialchars($note['title']); ?>
                                         </h3>
+                                        <?php
+                                            $note_desc1 = str_replace('\r\n','\n',$note['description']);
+                                        ?>
                                         <p class="text-gray-700 mb-4"
-                                            data-full-text="<?php echo htmlspecialchars($note['description']); ?>">
-                                            <?php echo substr(htmlspecialchars($note['description']), 0, 100); ?>
+                                            data-full-text="<?php echo trim($note_desc1); ?>">
+                                            <span class="hidden"><?php echo $note_desc; ?></span>
+                                            <?php
+                                            $note_desc = str_replace('\r\n','<br>',$note['description']);
+                                            echo substr($note_desc, 0, 100);
+                                            ?>
                                             <?php if (strlen($note['description']) > 100): ?>
                                                 <span class="read-more text-blue-600 cursor-pointer hover:underline">...Read
                                                     more</span>
@@ -264,7 +272,7 @@ if (isset($_GET['eventID'])) {
         <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"
             integrity="sha512-2ImtlRlf2VVmiGZsjm9bEyhjGW4dU7B6TNwh/hx/iSByxNENtj3WVE6o/9Lj4TJeVXPi4bnOIMXFIJJAeufa0A=="
             crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="assets/js/script.js?v=6"></script>
+        <script src="assets/js/script.js?v=7"></script>
     </body>
 
 </html>
