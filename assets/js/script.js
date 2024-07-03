@@ -52,7 +52,7 @@ $(document).ready(function () {
     });
 
     // Close the popup
-    $('#close-popup').click(function () {
+    $('.close-popup').click(function () {
         hideNotesPopup();
     });
 

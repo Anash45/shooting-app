@@ -4,6 +4,7 @@ if (!isUserLoggedIn()) {
     header('location:index.php');
     exit;
 }
+$page = 'event_details';
 if (isset($_GET['eventID'])) {
     $eventID = $_GET['eventID'];
     $userID = $_SESSION['user_id'];
@@ -123,7 +124,7 @@ if (isset($_GET['eventID'])) {
         <link href="dist/custom.css?v=7" rel="stylesheet">
     </head>
 
-    <body class="home-bg pb-10 flex flex-col justify-center"
+    <body class="home-bg pb-10 flex flex-col"
         style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
         <?php
         include ('./header.php');

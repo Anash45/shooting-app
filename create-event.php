@@ -4,6 +4,7 @@ if (!isUserLoggedIn()) {
     header('location:index.php');
     exit;
 }
+$page = 'create_edit_event';
 $userID = $_SESSION['user_id'];
 // Check if eventID is set in the URL
 if (isset($_GET['eventID'])) {
@@ -155,9 +156,9 @@ if (isset($_GET['eventID'])) {
         $currentEventID = mysqli_insert_id($conn);
 
         // Singles, handicaps, and doubles from $_POST array
-        $singles = $_POST['singles'];
-        $handicaps = $_POST['handicaps'];
-        $doubles = $_POST['doubles'];
+        $singles = isset($_POST['singles']) ? $_POST['singles'] : [];
+        $handicaps = isset($_POST['handicaps']) ? $_POST['handicaps'] : [];
+        $doubles = isset($_POST['doubles']) ? $_POST['doubles'] : [];
 
         // Insert singles into rounds table
         foreach ($singles as $shots) {
@@ -186,7 +187,6 @@ if (isset($_GET['eventID'])) {
 
         // Push a notification into $_SESSION['notifications']
         array_push($_SESSION['notifications'], array('success' => 'Event created successfully'));
-        header('location:dashboard.php?event=success');
     } catch (Exception $e) {
         // Rollback transaction on error
         mysqli_rollback($conn);
@@ -194,7 +194,7 @@ if (isset($_GET['eventID'])) {
     }
 }
 // print_r($_POST);
-if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_note'])) {
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($_POST['title']) && !empty($_POST['description'])) {
 
     // echo 1;
     if (isset($currentEventID)) {
@@ -261,12 +261,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_note'])) {
 
             // Execute the query
             if (mysqli_stmt_execute($stmt)) {
-                if(isset($_GET['eventID'])){
+                if (isset($_GET['eventID'])) {
                     array_push($_SESSION['notifications'], array('success' => 'Event updated & note added successfully'));
-                }else{
+                } else {
                     array_push($_SESSION['notifications'], array('success' => 'Event created & note added successfully'));
                 }
-                header('location:event-details.php?eventID=' . $currentEventID);
+                header('location:event-details.php?eventID='.$currentEventID);
                 exit;
             } else {
                 $info = "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>Error: " . mysqli_error($conn) . "</div>";
@@ -279,7 +279,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_note'])) {
                 array_push($_SESSION['notifications'], array('error' => $error));
             }
         }
-    }else{
+    } else {
         $info = "<div class='px-3 py-2 mb-3 bg-red-200 border-red-800 text-red-800 border rounded'>A note cannot be added without adding an event.</div>";
     }
 }
@@ -335,7 +335,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_note'])) {
                 <div class="tab-content active" id="tab1">
                     <div
                         class="bg-white shadow-md rounded border-b-orange px-8 pt-6 pb-8 mb-4 max-w-lg glass w-full mx-auto">
-                        <h2 class="text-center text-2xl font-bold mb-4"><?php echo $pageTitle = isset($_GET['eventID']) ? 'Update Event' : 'Create Event'; ?></h2>
+                        <h2 class="text-center text-2xl font-bold mb-4">
+                            <?php echo $pageTitle = isset($_GET['eventID']) ? 'Update Event' : 'Create Event'; ?>
+                        </h2>
                         <?php echo $info; ?>
                         <!-- Type (Drop Down) -->
                         <div class="mb-4">
@@ -492,14 +494,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['add_note'])) {
                                 type="button" data-target="tab1"><i class="fa fa-arrow-left"></i> Back</button>
                             <button
                                 class="btn-create text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-                                type="submit" id="submitBtn" name="<?php echo $btnName = isset($_GET['eventID']) ? 'update_event' : 'add_event'; ?>">Submit <i class="fa fa-arrow-right"></i></button>
+                                type="submit" id="submitBtn"
+                                name="<?php echo $btnName = isset($_GET['eventID']) ? 'update_event' : 'add_event'; ?>">Submit
+                                <i class="fa fa-arrow-right"></i></button>
                         </div>
                     </div>
                 </div>
             </form>
         </main>
         <?php
-        include './footer.php';
+        if (isset($_GET['eventID'])) {
+            include './footer.php';
+        }
         ?>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
         <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
