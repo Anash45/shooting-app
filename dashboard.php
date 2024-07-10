@@ -11,6 +11,51 @@ $userid = $_SESSION['user_id'];
 if (!isset($_SESSION['notifications'])) {
     $_SESSION['notifications'] = array();
 }
+$time_period = isset($_POST['time_period']) ? $_POST['time_period'] : 'past_month';
+$start_date = '';
+$end_date = '';
+
+switch ($time_period) {
+    case 'past_week':
+        $start_date = date('Y-m-d', strtotime('-1 week'));
+        $end_date = date('Y-m-d');
+        break;
+    case 'past_month':
+        $start_date = date('Y-m-d', strtotime('-1 month'));
+        $end_date = date('Y-m-d');
+        break;
+    case 'past_6_months':
+        $start_date = date('Y-m-d', strtotime('-6 months'));
+        $end_date = date('Y-m-d');
+        break;
+    case 'custom':
+        $start_date = $_POST['start_date'];
+        $end_date = $_POST['start_date'];
+        break;
+    default:
+        $time_period = 'past_month';
+        $start_date = date('Y-m-d', strtotime('-1 month'));
+        $end_date = date('Y-m-d');
+}
+
+// echo $start_date;
+// echo "<br>";
+// echo $end_date;
+// echo "<br>";
+// echo $userid;
+// echo "<br>";
+$query = "SELECT SUM(totalShots) as total_shots FROM events 
+          WHERE user_id = ? AND `date` BETWEEN ? AND ?";
+$stmt = $conn->prepare($query);
+$stmt->bind_param('iss', $userid, $start_date, $end_date);
+$stmt->execute();
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
+
+// print_r($row);
+$totalShots = $row['total_shots'] ?? 0;
+
+$stmt->close();
 
 if (isset($_REQUEST['delete'])) {
     $eventId = $_REQUEST['delete'];
@@ -43,6 +88,22 @@ if (isset($_REQUEST['delete'])) {
             ?>
             <main class="py-5 h-100vh">
                 <div class="container">
+                    <div class="flex mb-6 justify-between items-center gap-4 sm:flex-row flex-col">
+                        <form action="" class="flex items-center gap-4" id="shotsForm" method="POST">
+                            <select name="time_period" id="time_period" class="form-input w-full border p-1 rounded">
+                                <option value="">Select Date</option>
+                                <option value="past_week" <?php echo $selected = ($time_period == 'past_week') ? 'selected' : ''; ?>>Last Week</option>
+                                <option value="past_month" <?php echo $selected = ($time_period == 'past_month') ? 'selected' : ''; ?>>Last Month</option>
+                                <option value="past_6_months" <?php echo $selected = ($time_period == 'past_6_months') ? 'selected' : ''; ?>>Last 6 Months</option>
+                                <option value="custom" <?php echo $selected = ($time_period == 'custom') ? 'selected' : ''; ?>>Custom Date</option>
+                            </select>
+                            <div id="custom_date" <?php echo $custom_date = ($time_period == 'custom') ? 'style="display: block;"' : 'style="display: none;"'; ?> class="form-input w-full border p-1 rounded">
+                                <input type="date" id="start_date" name="start_date" value="<?php echo $custom_date = ($time_period == 'custom') ? $start_date : ''; ?>">
+                            </div>
+                        </form>
+                        <h4 class="font-bold text-xl text-white p-3 bg-black border-white border">Total Shots:
+                            <?php echo $totalShots; ?></h4>
+                    </div>
                     <h3 class="text-3xl font-bold text-center text-white">My Events</h3>
                     <div class="events py-10">
                         <?php echo $info; ?>
@@ -57,7 +118,7 @@ if (isset($_REQUEST['delete'])) {
         LEFT JOIN ears ea ON e.ears = ea.id
         LEFT JOIN type t ON e.type = t.id
         WHERE e.user_id = '$userid'
-        ORDER BY e.createdAt DESC";
+        ORDER BY e.date DESC";
 
                         $result = mysqli_query($conn, $sql);
 
@@ -98,6 +159,24 @@ if (isset($_REQUEST['delete'])) {
         </div>
         <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
         <script src="assets/js/script.js?v=7"></script>
+        <script>
+            $(document).ready(function () {
+                $('#time_period').change(function () {
+                    if ($(this).val() === 'custom') {
+                        $('#custom_date').show();
+                    } else {
+                        $('#custom_date').hide();
+                        $('#shotsForm').submit();
+                    }
+                });
+
+                $('#start_date').change(function () {
+                    if ($('#start_date').val()) {
+                        $('#shotsForm').submit();
+                    }
+                });
+            });
+        </script>
     </body>
 
 </html>

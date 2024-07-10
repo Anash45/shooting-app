@@ -77,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function () {
         element.addEventListener('click', function () {
             const parentParagraph = this.parentElement;
             const hiddenSpan = parentParagraph.querySelector('.hidden');
-            const fullText = hiddenSpan.innerHTML;
+            const fullText = hiddenSpan.textContent;
             const formattedText = fullText.replace(/<br>/g, '\n'); // Replace \r\n with \n
             alert(formattedText.trim());
         });

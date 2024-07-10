@@ -124,8 +124,7 @@ if (isset($_GET['eventID'])) {
         <link href="dist/custom.css?v=7" rel="stylesheet">
     </head>
 
-    <body class="home-bg pb-10 flex flex-col"
-        style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
+    <body class="home-bg pb-10 flex flex-col" style="background-image: url(./assets/images/<?php echo getBgImg(); ?>);">
         <?php
         include ('./header.php');
         ?>
@@ -233,15 +232,14 @@ if (isset($_GET['eventID'])) {
                                         <h3 class="text-lg font-semibold mb-2"><?php echo htmlspecialchars($note['title']); ?>
                                         </h3>
                                         <?php
-                                            $note_desc1 = str_replace('\r\n','\n',$note['description']);
+                                        $note_desc1 = str_replace('\r\n', '\n', $note['description']);
                                         ?>
-                                        <p class="text-gray-700 mb-4"
-                                            data-full-text="<?php echo trim($note_desc1); ?>">
-                                            <span class="hidden"><?php echo $note_desc; ?></span>
+                                        <p class="text-gray-700 mb-4" data-full-text="<?php echo trim($note_desc1); ?>">
                                             <?php
-                                            $note_desc = str_replace('\r\n','<br>',$note['description']);
+                                            $note_desc = str_replace('\r\n', '<br>', $note['description']);
                                             echo substr($note_desc, 0, 100);
                                             ?>
+                                            <span class="hidden"><?php echo $note_desc; ?></span>
                                             <?php if (strlen($note['description']) > 100): ?>
                                                 <span class="read-more text-blue-600 cursor-pointer hover:underline">...Read
                                                     more</span>
